@@ -31,13 +31,13 @@
 		
 		//R à déterminer
 		
-		double [][][] s1= new double [n+1][n+1][m]; 
+		double [][][] s1= new double [n+1][n+1][M]; 
 		/* setup time entre le job i et le job j sur la machine k au niveau 1*/
-		double [][][] s2= new double [n+1][n+1][f]; 
+		double [][][] s2= new double [n+1][n+1][F]; 
 		/* setup time entre le job i et le job j sur la machine k au niveau 2*/
-		double [][] p1= new double [n+1][m]; 
+		double [][] p1= new double [n+1][M]; 
 		/* temps de process du job i sur la machine k au niveau 1 */
-		double [][] p2= new double [n+1][f]; 
+		double [][] p2= new double [n+1][F]; 
 		/* temps de process du job i sur la machine k au niveau 2 */
 		double [] d = new double [n]; /* due-dates de chaque job */
 		double [] pen = new double [n]; /* penalité de retard */
@@ -63,8 +63,19 @@
 
 
 	    // Instantier les variables
-	    for (int i = 0; i < nbMatieresPremieres; i++)
-	      x[i] = cplex.numVar(0, stock[i], "x" + i);
+	    for (int i = 0; i < n+1; i++)
+		    for (int j = 0; j < n+1; j++)
+			    for (int k = 0; k < M; i++)
+			    	x1[i][j][k] = cplex.intVar(0,1, "x1" + i+"_"+j+"_"+k);
+	    
+	    for (int i = 0; i < n+1; i++)
+		    for (int j = 0; j < n+1; j++)
+			    for (int k = 0; k < F; i++)
+			    	x2[i][j][k] = cplex.intVar(0,1, "x2" + i+"_"+j+"_"+k);
+	    
+	    for (int i = 0; i < n+1; i++)
+	    	for (int k = 0; k < F; i++)
+			    	y1[i][k] = cplex.intVar(0,1, "y1" + i+"_"+k);
 	    
 	    
 	    
