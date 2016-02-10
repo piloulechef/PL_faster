@@ -60,27 +60,27 @@
     	    IloNumVar W;
 
     	    // Instantier les variables
-    	    for (int i = 0; i < n+1; i++)
-    		    for (int j = 0; j < n+1; j++)
-    			    for (int k = 0; k < M; i++)
+    	    for (int i = 0; i <= n; i++)
+    		    for (int j = 0; j <= n; j++)
+    			    for (int k = 1; k <= M; k++)
     			    	x1[i][j][k] = cplex.intVar(0,1, "x1" + i+"_"+j+"_"+k);
     	    
-    	    for (int i = 0; i < n+1; i++)
-    		    for (int j = 0; j < n+1; j++)
-    			    for (int k = 0; k < F; i++)
+    	    for (int i = 0; i <= n; i++)
+    		    for (int j = 0; j <= n; j++)
+    			    for (int k = 1; k <= F; k++)
     			    	x2[i][j][k] = cplex.intVar(0,1, "x2" + i+"_"+j+"_"+k);
     	    
-    	    for (int i = 0; i < n+1; i++)
-    	    	for (int k = 0; k < F; i++)
+    	    for (int i = 0; i <= n; i++)
+    	    	for (int k = 1; k <= F; k++)
     			    	y1[i][k] = cplex.intVar(0,1, "y1" + i+"_"+k);
 
-    	   for(int i = 0 ; i < n+1 ; i++){
-    		   for (int k = 0 ; k<F ; k++){
+    	   for(int i = 0 ; i <= n; i++){
+    		   for (int k = 1 ; k<=F ; k++){
     			   y2[i][k] = cplex.intVar(0, 1, "y2" + i + "_" + k);
     		   }
     	   }
     	   
-    	   for(int i; i<n+1 ; i ++){
+    	   for(int i=0; i<= n ; i ++){
     		   for(int ln = 1 ; ln<=L ; ln++){
     			   c[i][ln] = cplex.numVar(0, R , "c" + i + "_" + ln);
     		   }
@@ -91,28 +91,28 @@
     	    Z = cplex.numVar(0, Double.MAX_VALUE, "obj");
     	    
     	    // Contrainte 1: 
-    	    for (int i = 0; i < n; i++) {
+    	    for (int i = 1; i <= n; i++) {
     	      IloLinearNumExpr expr = cplex.linearNumExpr();
-    	      for (int k = 0; k < M; k++) {
+    	      for (int k = 1; k <= M; k++) {
     	        expr.addTerm(1, y1[i][k]);
     		     cplex.addEq(1, y1[i][k]);
     	      }
           }
     	    
     	 // Contrainte 2: 
-    	    for (int i = 0; i < n; i++) {
+    	    for (int i = 1; i <= n; i++) {
     		      IloLinearNumExpr expr = cplex.linearNumExpr();
-    		      for (int k = 0; k < F; k++) {
+    		      for (int k = 1; k <= F; k++) {
     		        expr.addTerm(1, y2[i][k]);
     			      cplex.addEq(1, y2[i][k]);
     		      }
     		    }
 
     	    // Contrainte 3: 
-    	    for (int i = 0; i < n+1; i++) {
-    		    for (int k = 0; k < M; k++) {
+    	    for (int i = 0; i <= n; i++) {
+    		    for (int k = 1; k <= M; k++) {
     	    IloLinearNumExpr expr = cplex.linearNumExpr();
-    	    for (int j = 0; j < n+1; j++) {
+    	    for (int j = 0; j <= n; j++) {
     	      expr.addTerm(1, x1[i][j][k]);
     		    cplex.addEq(1, x1[i][j][k]);
     		    }
@@ -120,10 +120,10 @@
     	    }
     	    	    
     	 // Contrainte 4: 
-    	    for (int i = 0; i < n+1; i++) {
-    		    for (int k = 0; k < F; k++) {
+    	    for (int i = 0; i <= n; i++) {
+    		    for (int k = 1; k <= F; k++) {
     	    IloLinearNumExpr expr = cplex.linearNumExpr();
-    	    for (int j = 0; j < n+1; j++) {
+    	    for (int j = 0; j <= n; j++) {
     	      expr.addTerm(1, x2[i][j][k]);
     		  cplex.addEq(1, x2[i][j][k]);
     		  }
@@ -131,10 +131,10 @@
     	    }
     	    
     		 // Contrainte 5: 
-    	    for (int i = 0; i < n+1; i++) {
-    		    for (int k = 0; k < M; k++) {
+    	    for (int i = 0; i <= n; i++) {
+    		    for (int k = 1; k <= M; k++) {
     	    IloLinearNumExpr expr = cplex.linearNumExpr();
-    	    for (int j = 0; j < n+1; j++) {
+    	    for (int j = 0; j <= n; j++) {
     	      expr.addTerm(1, x1[j][i][k]);
     		  cplex.addEq(1, x1[j][i][k]);
     	    	}
