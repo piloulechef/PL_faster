@@ -30,13 +30,13 @@ public class InstancesMachines {
 		private double[][][] p2;
 		
 		/**due date pour le job*/
-		private double[] duedate;
+		private double[] d;
 		
 		/**pénalité pour le job*/
-		private double[] penalite; 
+		private double[] pen; 
 		
 		/** Nombre de niveaux*/
-		private int nbNivx; 
+		private int L; 
 	
 		/** Nom du fichier TSPLib correspondant à l'instance chargée */
 		private String fileName;
@@ -46,117 +46,144 @@ public class InstancesMachines {
 		// --------------- ACCESSEURS -----------------
 		// --------------------------------------------
 
-		/** @return le nombre de sommets dans le problème */
-		public int getNbSommets() {
-			return nbSommets;
+		/** @return le nombre de jobs */
+		public int getNbJobs() {
+			return n;
 		}
 
-		/**
-		 * @param i
-		 *          numéro de sommet (doit être compris entre 0 et le nombre de
-		 *          sommets du problème-1).
-		 * @return l'abcisse du sommet i.
-		 **/
-		public double getX(int i) throws Exception {
-			if ((i<0) || (i>nbSommets-1))
-				throw new Exception("Erreur : " + i + " n\'est pas un numéro de sommet compris entre 0 et " + (nbSommets-1));
-			return coordX[i];
+		/** @return le nombre de machines au niveau 1 */
+		public int getNbM() {
+			return M;
 		}
-
+		
+		/** @return le nombre de machines au niveau 2 */
+		public int getNbF() {
+			return F;
+		}
+		
+		/** @return Le big M*/
+		public double getBigM() {
+			
+			//TODO
+			
+		}
+		
+		/** @return le tableau des setup pour le niveau 1*/
+		public double[][][] getTabSetupM() {
+			return s1;
+		}
+		
+		/** @return le tableau des setup pour le niveau 2*/
+		public double[][][] getTabSetupF() {
+			return s2;
+		}
+		
+		/** @return le tableau des processing time pour le niveau 1*/
+		public double[][][] getTabProcessM() {
+			return p1;
+		}
+		
+		/** @return le tableau des processing time pour le niveau 2*/
+		public double[][][] getTabProcessF() {
+			return p2;
+		}
+		
+		/** @return les due date */
+		public double[] getTabDD() {
+			return d;
+		}
+		
+		/** @return les pénalités */
+		public double[] getTabPen() {
+			return pen;
+		}
+		
+		/** @return le nombre de niveaux */
+		public double getNbNvx() {
+			return L;
+		}
+		
+		
 		/**
 		 * @param i
-		 *          numéro de sommet (doit être compris entre 0 et le nombre de
-		 *          sommets du problème-1).
-		 * @return l'ordonnée du sommet i.
+		 * 			 job i 
+		 * @param m
+		 * 			sur la machine m au niveau 2
+		 * @return le processing time du job i sur la machine m au niveau 1
 		 * @throws Exception
 		 **/
-		public double getY(int i) throws Exception {
-			if ((i<0) || (i>nbSommets-1))
-				throw new Exception("Erreur : " + i + " n\'est pas un numéro de sommet compris entre 0 et " + (nbSommets-1));
-			return coordY[i];
+		public double getP1(int i, int m) throws Exception {
+			
+			//TODO
+			
 		}
-
+			
 		/**
 		 * @param i
-		 *          numéro de sommet (doit être compris entre 0 et le nombre de
-		 *          sommets du problème-1).
-		 * @return le label du sommet i.
+		 * 			 job i 
+		 * @param f
+		 * 			sur la machine f au niveau 2
+		 * @return le processing time du job i sur la machine m au niveau 2
 		 * @throws Exception
 		 **/
-		public String getLabel(int i) throws Exception {
-			if ((i < 0) || (i > nbSommets-1))
-				throw new Exception("Erreur : " + i + " n\'est pas un numéro de sommet compris entre 1 et " + (nbSommets-1));
-			return labels[i];
-		}
-
-		/**
-		 * @param i
-		 * @return la capacité du véhicule i
-		 */
-		public int getCapaVehicule(int i) {
-			return capaVehicule[i];
+		public double getP2(int i, int f) throws Exception {
+			
+			//TODO
+	
 		}
 		
 		/**
-		 * 
-		 * @return le nombre de véhicule
-		 */
-		public int getNbVehicule(){
-			return capaVehicule.length;
-		}
-
-
-		/**
 		 * @param i
-		 *          numéro de sommet (doit être compris entre 0 et le nombre de
-		 *          sommets du problème-1).
-		 * @return la demande du sommet i.
+		 * 			 job i 
+		 * @param m
+		 * 			sur la machine m au niveau 1
+		 * @return le setup time du job i sur la machine m au niveau 1
 		 * @throws Exception
 		 **/
-		public int getDemande(int i) throws Exception {
-			if ((i < 0) || (i > nbSommets-1))
-				throw new Exception("Erreur : " + i + " n\'est pas un numéro de sommet compris entre 0 et " + (nbSommets-1));
-			return demande[i];
+		public double getS1(int i, int m) throws Exception {
+			
+			//TODO
+	
 		}
 		
-		
-		
-		
-
 		/**
-		 * Retourne la distance euclienne arrondie à l'entier le plus proche entre
-		 * deux sommets. Toutes les distances sont calculées à la lecture de
-		 * l'instance, cette fonction ne fait pas de calcul. Note : les problèmes sont
-		 * symmétriques, la distance de i à j est la même que la distance de j à i.
-		 * 
 		 * @param i
-		 *          numéro de sommet de départ (doit être compris entre 0 et le nombre
-		 *          de sommets du problème).
-		 * @param j
-		 *          numéro de sommet d'artrivée (doit être compris entre 0 et le
-		 *          nombre de sommets du problème).
-		 * @return la distance euclidienne arrondie à l'entier lle plus proche entre
-		 *         les sommets i et j.
+		 * 			 job i 
+		 * @param f
+		 * 			sur la machine f au niveau 1
+		 * @return le setup time du job i sur la machine m au niveau 2
 		 * @throws Exception
-		 *           retourne une exception si i ou j ne sont pas des numéros de
-		 *           position valide.
 		 **/
-		public long getDistances(int i, int j) throws Exception {
-			if ((i<0) || (i>nbSommets-1))
-				throw new Exception("Erreur : " + i + " n\'est pas un numéro de sommet compris entre 0 et " + (nbSommets-1));
-			if ((j<0) || (j>nbSommets-1))
-				throw new Exception("Erreur : " + j + " n\'est pas un numéro de sommet compris entre 0 et " + (nbSommets-1));
-			return distances[i][j];
+		public double getS2(int i, int f) throws Exception {
+			
+			//TODO
+	
 		}
-
-
+		
+		
 		/**
-		 * @return Renvoie la matrice de disance
-		 */
-		public long[][] getDistances() {
-			return distances;
+		 * @param i
+		 * 			due date du job i 
+		 * @return la due date du job i 
+		 * @throws Exception
+		 **/
+		public double getDueDate(int i) throws Exception {
+			
+			//TODO
+	
 		}
-
+		
+		/**
+		 * @param i
+		 * 			penalité du job i 
+		 * @return la penalité du job i 
+		 * @throws Exception
+		 **/
+		public double getPenalite(int i) throws Exception {
+			
+			//TODO
+	
+		}
 
 		/**
 		 * @return Renvoie le nom du fichier chargé.
@@ -164,6 +191,7 @@ public class InstancesMachines {
 		public String getFileName() {
 			return fileName;
 		}
+		
 
 		// --------------------------------------
 		// ------------ CONSTRUCTEUR ------------
