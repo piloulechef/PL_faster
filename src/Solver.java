@@ -24,10 +24,13 @@
 	    // DonnÃ©es
 
 	    int n ; /* le nombre de jobs à ordonnancer */
-	    int m; /* les m machines du niveau 1*/
-	    int l; /* les levels */
-		int f; /* les f machines du niveau 2*/
+	    int M; /* les m machines du niveau 1*/
+	    int L; /* les levels */
+		int F; /* les f machines du niveau 2*/
 		int R; /* paramètre très grand*/
+		
+		//R à déterminer
+		
 		double [][][] s1= new double [n+1][n+1][m]; 
 		/* setup time entre le job i et le job j sur la machine k au niveau 1*/
 		double [][][] s2= new double [n+1][n+1][f]; 
@@ -46,15 +49,15 @@
 	    /* VARIABLES*/
 	    
 	    /*x1[i,j,k]=1 si le job j est ordonnancé après le job i sur la machine k au niveau 1 */
-	    IloNumVar[][][] x1 = new IloNumVar[n+1][n+1][m];
+	    IloNumVar[][][] x1 = new IloNumVar[n+1][n+1][M];
 	    /*x2[i,j,k]=1 si le job j est ordonnancé après le job i sur la machine k au niveau 2 */
-	    IloNumVar[][][] x2 = new IloNumVar[n+1][n+1][f];
+	    IloNumVar[][][] x2 = new IloNumVar[n+1][n+1][F];
 	    /*y1[i,k]=1 si le job i est ordonnancé sur la machine k au niveau 1 */
-	    IloNumVar[][] y1 = new IloNumVar[n+1][m];
+	    IloNumVar[][] y1 = new IloNumVar[n+1][M];
 	    /*y2[i,k]=1 si le job i est ordonnancé sur la machine k au niveau 2 */
-	    IloNumVar[][] y2 = new IloNumVar [n+1][f];
+	    IloNumVar[][] y2 = new IloNumVar [n+1][F];
 	    /*date de fin du job i au niveau l*/
-	    IloNumVar [][] c = new IloNumVar [n+1][l];
+	    IloNumVar [][] c = new IloNumVar [n+1][L];
 	    /*variable qui va être supérieure à toutes les variables c[i,l] (cf fonction-objectif) */
 	    IloNumVar z;
 
@@ -62,6 +65,20 @@
 	    // Instantier les variables
 	    for (int i = 0; i < nbMatieresPremieres; i++)
 	      x[i] = cplex.numVar(0, stock[i], "x" + i);
+	    
+	    
+	    
+	   for(int i = 0 ; i < n+1 ; i++){
+		   for (int k = 0 ; k<F ; k++){
+			   y2[i][k] = cplex.intVar(0, 1, "y2" + i + "_" + k);
+		   }
+	   }
+	   
+	   for(int i; i<n+1 ; i ++){
+		   for(int ln = 1 ; ln<=L ; ln++){
+			   c[i][ln] = cplex.numVar(0, R , "c" + i + "_" + ln);
+		   }
+	   }
 
 
 	    // Variable reprÃ©sentant la fonction objectif
