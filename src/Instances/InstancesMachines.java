@@ -4,35 +4,40 @@ public class InstancesMachines {
 		// --------------------------------------------
 		// --------------- ATTRIBUTS ------------------
 		// --------------------------------------------
-
-		/** Nombre de niveaux*/
-		private int nbNiveaux; 
 		
 		/** Nombre de jobs*/
-		private int nbJobs;
-		
+		private int n;
+	
 		/**Nombre de machine au niveau 1*/
-		private int nbM;
+		private int M;
 		
-
 		/**Nombre de machine au niveau 2*/
-		private int nbF;
+		private int F;
+	
+		/**big M*/
+		private double R;
+		
+		/**setup time pour le niveau 1*/
+		private double[][][] s1;
+		
+		/**setup time pour le niveau 2*/
+		private double[][][] s2;
+		
+		/**processing time pour les jobs sur niveau 1*/
+		private double[][][] p1;
+		
+		/**processing time pour les jobs sur niveau 2*/
+		private double[][][] p2;
+		
+		/**due date pour le job*/
+		private double[] duedate;
 		
 		/**pénalité pour le job*/
 		private double[] penalite; 
 		
-		/**processing time pour le
-		
-		
-		/** Ordonnées */
-		private double[] coordY;
-
-		/**
-		 * Label des sommets
-		 */
-		private String[] labels;
-
-
+		/** Nombre de niveaux*/
+		private int nbNivx; 
+	
 		/** Nom du fichier TSPLib correspondant à l'instance chargée */
 		private String fileName;
 
