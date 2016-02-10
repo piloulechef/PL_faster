@@ -1,5 +1,7 @@
 package Instances;
 
+import java.io.IOException;
+
 public class InstancesMachines {
 		// --------------------------------------------
 		// --------------- ATTRIBUTS ------------------
@@ -99,7 +101,8 @@ public class InstancesMachines {
 		}
 		
 		/** @return le nombre de niveaux */
-		public double getNbNvx() {
+		public double getNbNvx() 
+		{
 			return L;
 		}
 		
@@ -112,7 +115,8 @@ public class InstancesMachines {
 		 * @return le processing time du job i sur la machine m au niveau 1
 		 * @throws Exception
 		 **/
-		public double getP1(int i, int m) throws Exception {
+		public double getP1(int i, int m) throws Exception 
+		{
 			
 			//TODO
 			
@@ -126,7 +130,8 @@ public class InstancesMachines {
 		 * @return le processing time du job i sur la machine m au niveau 2
 		 * @throws Exception
 		 **/
-		public double getP2(int i, int f) throws Exception {
+		public double getP2(int i, int f) throws Exception 
+		{
 			
 			//TODO
 	
@@ -140,7 +145,8 @@ public class InstancesMachines {
 		 * @return le setup time du job i sur la machine m au niveau 1
 		 * @throws Exception
 		 **/
-		public double getS1(int i, int m) throws Exception {
+		public double getS1(int i, int m) throws Exception 
+		{
 			
 			//TODO
 	
@@ -154,7 +160,8 @@ public class InstancesMachines {
 		 * @return le setup time du job i sur la machine m au niveau 2
 		 * @throws Exception
 		 **/
-		public double getS2(int i, int f) throws Exception {
+		public double getS2(int i, int f) throws Exception 
+		{
 			
 			//TODO
 	
@@ -163,11 +170,12 @@ public class InstancesMachines {
 		
 		/**
 		 * @param i
-		 * 			due date du job i 
+		 * 			job i 
 		 * @return la due date du job i 
 		 * @throws Exception
 		 **/
-		public double getDueDate(int i) throws Exception {
+		public double getDueDate(int i) throws Exception 
+		{
 			
 			//TODO
 	
@@ -175,11 +183,12 @@ public class InstancesMachines {
 		
 		/**
 		 * @param i
-		 * 			penalité du job i 
+		 * 			job i 
 		 * @return la penalité du job i 
 		 * @throws Exception
 		 **/
-		public double getPenalite(int i) throws Exception {
+		public double getPenalite(int i) throws Exception 
+		{
 			
 			//TODO
 	
@@ -188,7 +197,8 @@ public class InstancesMachines {
 		/**
 		 * @return Renvoie le nom du fichier chargé.
 		 */
-		public String getFileName() {
+		public String getFileName() 
+		{
 			return fileName;
 		}
 		
@@ -206,11 +216,12 @@ public class InstancesMachines {
 		 * @throws IOException
 		 *           Exception retournée en cas d'erreur de lecture dans le fichier.
 		 */
-		public InstanceCapacite(String fName) throws IOException
+		public InstancesMachines(String fName) throws IOException
 		{
 			fileName = fName;
 			read();
 		}
+		
 
 		// --------------------------------------
 		// -------------- METHODES --------------
@@ -232,7 +243,7 @@ public class InstancesMachines {
 			while (!line.startsWith("DIMENSION"));
 			Scanner lineSc = new Scanner(line);
 			lineSc.next();
-			if (!lineSc.hasNextInt()) {
+			if (!lineSc.hasNextInt()) { 
 				lineSc.next();
 			}
 			nbSommets =lineSc.nextInt();
