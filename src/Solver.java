@@ -21,11 +21,11 @@
     		 
     	    // DonnÃ©es
 
-    	    int n = instance.getNbJobs(); /* le nombre de jobs à ordonnancer */
-    	    int M ; /* les m machines du niveau 1*/
-    	    int L; /* les levels */
-    		int F; /* les f machines du niveau 2*/
-    		int R; /* paramètre très grand*/
+    	    int n = 6; /* le nombre de jobs à ordonnancer */
+    	    int M = 1; /* les m machines du niveau 1*/
+    	    int L =2 ; /* les levels */
+    		int F = 1; /* les f machines du niveau 2*/
+    		int R = 100; /* paramètre très grand*/
     		
     		//R à déterminer
     		
@@ -57,13 +57,15 @@
     	    /*date de fin du job i au niveau l*/
     	    IloNumVar [][] c = new IloNumVar [n+1][L];
     	    /*variable qui va être supérieure à toutes les variables c[i,l] (cf fonction-objectif) */
-    	    IloNumVar W;
+    	    IloNumVar W = new ();
 
     	    // Instantier les variables
     	    for (int i = 0; i <= n; i++)
     		    for (int j = 0; j <= n; j++)
     			    for (int k = 1; k <= M; k++)
+    			    	if (i!=j) {
     			    	x1[i][j][k] = cplex.intVar(0,1, "x1" + i+"_"+j+"_"+k);
+    			    	}
     	    
     	    for (int i = 0; i <= n; i++)
     		    for (int j = 0; j <= n; j++)
@@ -95,8 +97,9 @@
     	      IloLinearNumExpr expr = cplex.linearNumExpr();
     	      for (int k = 1; k <= M; k++) {
     	        expr.addTerm(1, y1[i][k]);
-    		     cplex.addEq(1, y1[i][k]);
     	      }
+ 		     cplex.addEq(1, expr);
+
           }
     	    
     	 // Contrainte 2: 
@@ -104,8 +107,9 @@
     		      IloLinearNumExpr expr = cplex.linearNumExpr();
     		      for (int k = 1; k <= F; k++) {
     		        expr.addTerm(1, y2[i][k]);
-    			      cplex.addEq(1, y2[i][k]);
     		      }
+			      cplex.addEq(1, expr);
+
     		    }
 
     	    // Contrainte 3: 
@@ -114,8 +118,9 @@
     	    IloLinearNumExpr expr = cplex.linearNumExpr();
     	    for (int j = 0; j <= n; j++) {
     	      expr.addTerm(1, x1[i][j][k]);
-    		    cplex.addEq(1, x1[i][j][k]);
     		    }
+		    cplex.addEq(1, expr);
+
     		   }
     	    }
     	    	    
@@ -125,8 +130,9 @@
     	    IloLinearNumExpr expr = cplex.linearNumExpr();
     	    for (int j = 0; j <= n; j++) {
     	      expr.addTerm(1, x2[i][j][k]);
-    		  cplex.addEq(1, x2[i][j][k]);
     		  }
+  		  cplex.addEq(1, expr);
+
     		 }
     	    }
     	    
@@ -136,34 +142,36 @@
     	    IloLinearNumExpr expr = cplex.linearNumExpr();
     	    for (int j = 0; j <= n; j++) {
     	      expr.addTerm(1, x1[j][i][k]);
-    		  cplex.addEq(1, x1[j][i][k]);
     	    	}
+  		  cplex.addEq(1, expr);
+
     		   }
     	    }
     	    	    
     		 // Contrainte 6: 
-    	    for (int i = 0; i < n+1; i++) {
-    		    for (int k = 0; k < F; k++) {
+    	    for (int i = 0; i <= n; i++) {
+    		    for (int k = 1; k <= F; k++) {
     	    IloLinearNumExpr expr = cplex.linearNumExpr();
-    	    for (int j = 0; j < n+1; j++) {
+    	    for (int j = 0; j <= n; j++) {
     	      expr.addTerm(1, x2[j][i][k]);
-    		  cplex.addEq(1, x2[j][i][k]);
     	    }
+  		  cplex.addEq(1, expr);
+
     		    }
     	    }
     	    	    		
     	  // Contrainte 7: 
-    	   for (int i = 0; i < n; i++) {
-    		   for (int j = 0; j < n; j++) {
+    	   for (int i = 0; i <= n; i++) {
+    		   for (int j = 0; j <= n; j++) {
     			   IloLinearNumExpr expr = cplex.linearNumExpr();
     	    	      expr.addTerm(c[j][1],1);
     	    	      expr.addTerm(c[i][1],-1);
-    	    	      for (int k=0; k<M; k++) {
+    	    	      for (int k=1; k<=M; k++) {
     	    	    	  expr.addTerm(x1[i][j][k],-R);
     	    	      }
     	    	      expr.setConstant(R);
     				  IloLinearNumExpr expr1 = cplex.linearNumExpr();
-    				  for (int k=0; k<M; k++) {
+    				  for (int k=1; k<=M; k++) {
     	    	    	  expr1.addTerm(s1[i][j][k],y1[i][k]);
     	    	    	  expr1.addTerm(p1[j][k],y1[i][k]);
     	    	      }
@@ -174,23 +182,22 @@
     	   
     	  
     	    //Contrainte 8 		
-    	    for(int i = 0 ; i < n+1 ; i ++){
-    	    	for( int j = 0 ; j < n ; j++){
+    	    for(int i = 0 ; i <= n ; i ++){
+    	    	for( int j = 0 ; j <= n ; j++){
     	    		
     	    		IloLinearNumExpr expr = cplex.linearNumExpr();
     	    		IloLinearNumExpr expr2 = cplex.linearNumExpr();
-    	    		IloLinearNumExpr expr3 = cplex.linearNumExpr();
     	    		
     	    		expr.addTerm(c[j][2],1);
     	    		expr.addTerm(c[i][2],-1);
     	    		
-    	    		for(int k = 0 ; k<F;k++){
+    	    		for(int k = 1 ; k<=F;k++){
     	    		expr.addTerm(x2[i][j][k],-R);
     	    		}
     	    		
     	    		expr.setConstant(R);
     	    		
-    	    		for(int k = 0 ; k<F ; k++){
+    	    		for(int k = 1 ; k<=F ; k++){
     	    			expr2.addTerm(s2[i][j][k], y2[i][k]);
     	    			expr2.addTerm(p2[j][k], y2[i][k]);
     	    		}
@@ -201,14 +208,14 @@
     	    }
     	    	//Contrainte 9 
     	    
-    	    	for(int i = 0 ; i<n ; i++){
+    	    	for(int i = 1 ; i<=n ; i++){
     	    		IloLinearNumExpr expr = cplex.linearNumExpr();
     	    		IloLinearNumExpr expr2 = cplex.linearNumExpr();
     	    		
     	    		expr.addTerm(c[i][2], 1);
     	    		expr.addTerm(c[i][1], -1);		
     	    				
-    	    		for(int k = 0 ; k<F ; k++  ){
+    	    		for(int k = 1 ; k<=F ; k++  ){
     	    			expr2.addTerm(p2[i][k] , y2[i][k]);
     	    		}
     	    		
@@ -218,11 +225,11 @@
     	    	    	
     	    	//Contrainte 10
     	    	
-    	    	for(int k = 0 ; k<M; k ++){
+    	    	for(int k = 1 ; k<=M; k ++){
     	    		IloLinearNumExpr expr = cplex.linearNumExpr();
     	    		
-    	    		for(int j = 0 ; j<n ; j ++){
-    	    			expr.addTerm(x1[n+1][j][k], 1);
+    	    		for(int j = 1 ; j<=n ; j ++){
+    	    			expr.addTerm(x1[0][j][k], 1);
     	    		}
     	    		
     	    		cplex.addEq(1, expr);
@@ -230,11 +237,11 @@
     	    	
     	    	//Contrainte 11
     	    	
-    	    	for(int k = 0 ; k<M; k ++){
+    	    	for(int k = 1 ; k<=M; k ++){
     	    		IloLinearNumExpr expr = cplex.linearNumExpr();
     	    		
-    	    		for(int i = 0 ; i<n ; i ++){
-    	    			expr.addTerm(x1[i][n+1][k], 1);
+    	    		for(int i = 1; i<=n ; i ++){
+    	    			expr.addTerm(x1[i][0][k], 1);
     	    		}
     	    		
     	    		cplex.addEq(1, expr);
@@ -242,11 +249,11 @@
     	    	
     	    	//Contrainte 12
     	    	
-    	    	for(int k = 0 ; k<F; k ++){
+    	    	for(int k = 1 ; k<=F; k ++){
     	    		IloLinearNumExpr expr = cplex.linearNumExpr();
     	    		
-    	    		for(int j = 0 ; j<n ; j ++){
-    	    			expr.addTerm(x1[n+1][j][k], 1);
+    	    		for(int j = 1 ; j<=n ; j ++){
+    	    			expr.addTerm(x2[0][j][k], 1);
     	    		}
     	    		
     	    		cplex.addEq(1, expr);
@@ -254,18 +261,18 @@
     	    	
     	    	//Contrainte 13
     	    	
-    	    	for(int k = 0 ; k<F; k ++){
+    	    	for(int k = 1 ; k<=F; k ++){
     	    		IloLinearNumExpr expr = cplex.linearNumExpr();
     	    		
-    	    		for(int i = 0 ; i<n ; i ++){
-    	    			expr.addTerm(x1[i][n+1][k], 1);
+    	    		for(int i = 1 ; i<=n ; i ++){
+    	    			expr.addTerm(x2[i][0][k], 1);
     	    		}
     	    		
     	    		cplex.addEq(1, expr);
     	    	} 
     	   
     	   // Contrainte 14: 
-    	    for (int i = 0; i < n; i++) {
+    	    for (int i = 1; i <= n; i++) {
     		  cplex.addGe(W, c[i][2]);
     	    }
     		    
@@ -280,7 +287,7 @@
     	   
     	      exprObj.addTerm(W,1);
     	      
-    	      for( int i = 0 ; i < n ; i ++){
+    	      for( int i = 1 ; i <= n ; i ++){
     	    	  exprObj.addTerm(pen[i], c[i][2]);
     	    	  double expr = -pen[i]*d[i];
     	    	  exprObj.setConstant(expr);
