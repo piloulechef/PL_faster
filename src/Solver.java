@@ -59,7 +59,7 @@
 	    /*date de fin du job i au niveau l*/
 	    IloNumVar [][] c = new IloNumVar [n+1][L];
 	    /*variable qui va être supérieure à toutes les variables c[i,l] (cf fonction-objectif) */
-	    
+	    IloNumVar W;
 
 
 	    // Instantier les variables
@@ -220,39 +220,27 @@
 	    /********************FINCONTRAINTE PL 8 jusqu'à la fin**************************/
 	    /*******************************************************************************/
 	    
-	    // Contrainte 1: Respect du pourcentage minimum
-	    for (int j = 0; j < nbElements; j++) {
-	      IloLinearNumExpr expr = cplex.linearNumExpr();
-	      for (int i = 0; i < nbMatieresPremieres; i++) {
-	        expr.addTerm(compoMatiere[i][j], x[i]);
-	      }
-	      cplex.addLe(pourcentageMin[j] * quantite, expr);
-	    }
-
-	    // Contrainte 2: Respect du pourcentage maximum
-	    for (int j = 0; j < nbElements; j++) {
-	      IloLinearNumExpr expr = cplex.linearNumExpr();
-	      for (int i = 0; i < nbMatieresPremieres; i++) {
-	        expr.addTerm(compoMatiere[i][j], x[i]);
-	      }
-	      cplex.addGe(pourcentageMax[j] * quantite, expr);
-	    }
-
-	    // Contrainte 3: Respect de la quantitÃ© produite
-	    IloLinearNumExpr expr = cplex.linearNumExpr();
-	    for (int i = 0; i < nbMatieresPremieres; i++) {
-	      expr.addTerm(1, x[i]);
-	    }
-	    cplex.addGe(expr, quantite);
+	    	
 
 	    // Objectif: minimiser le cout
 	    cplex.addObjective(IloObjectiveSense.Minimize, Z);
 
+	    //minimize dateFinOrdonnancement: z + sum {i in 1..n} pen[i]*(c[i,2]-d[i]);
+	    
+	    /* la fonction-objectif (on cherche à minimiser la date de fin au plus tard de toutes les tâches
+	    et à ,pénaliser les retards)*/
+	    
 	    // Objective function
 	    IloLinearNumExpr exprObj = cplex.linearNumExpr();
-	    for (int i = 0; i < nbMatieresPremieres; i++) {
-	      exprObj.addTerm(cout[i], x[i]);
-	    }
+	   
+	      exprObj.addTerm(W,1);
+	      
+	      for( int i = 0 ; i < n ; i ++){
+	    	  exprObj.addTerm(pen[i], c[i][2]);
+	    	  double expr = -pen[i]*d[i];
+	    	  exprObj.setConstant(expr);
+	      }
+	      
 	    cplex.addEq(exprObj, Z);
 
 	    // RÃ©solution (result est Ã  vrai si cplex a trouvÃ© une solution rÃ©alisable)
