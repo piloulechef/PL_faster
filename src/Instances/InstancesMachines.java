@@ -274,9 +274,9 @@ public class InstancesMachines {
 
 			int idx = 0;
 			for (int s=0;s<nbSommets;s++){
-				assert(idx<nbSommets);
+				assert(idx<nbSommets);//?????????????????
 				lineSc = new Scanner(line);
-				lineSc.useLocale(Locale.US);
+				lineSc.useLocale(Locale.US);//??????????????
 				labels[idx] = lineSc.next();
 				coordX[idx] = lineSc.nextDouble();
 				coordY[idx] = lineSc.nextDouble();
@@ -310,9 +310,9 @@ public class InstancesMachines {
 
 			idx = 0;
 			for (int s=0;s<nbSommets;s++){
-				assert(idx<nbSommets);
+				assert(idx<nbSommets);//???????????????
 				lineSc = new Scanner(line);
-				lineSc.useLocale(Locale.US);
+				lineSc.useLocale(Locale.US);//??????????????
 				lineSc.next();
 				demande[idx] = lineSc.nextInt();
 				line = sc.nextLine();
