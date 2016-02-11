@@ -1,6 +1,11 @@
 package Instances;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.Scanner;
+
+
 
 public class InstancesMachines {
 		// --------------------------------------------
@@ -26,10 +31,10 @@ public class InstancesMachines {
 		private double[][][] s2;
 		
 		/**processing time pour les jobs sur niveau 1*/
-		private double[][][] p1;
+		private double[][] p1;
 		
 		/**processing time pour les jobs sur niveau 2*/
-		private double[][][] p2;
+		private double[][] p2;
 		
 		/**due date pour le job*/
 		private double[] d;
@@ -43,6 +48,11 @@ public class InstancesMachines {
 		/** Nom du fichier TSPLib correspondant à l'instance chargée */
 		private String fileName;
 
+		/** Nom du fichier TSPLib correspondant à l'instance chargée */
+		private String fileName1;
+		
+		/** Nom du fichier TSPLib correspondant à l'instance chargée */
+		private String fileName2;
 
 		// --------------------------------------------
 		// --------------- ACCESSEURS -----------------
@@ -81,12 +91,12 @@ public class InstancesMachines {
 		}
 		
 		/** @return le tableau des processing time pour le niveau 1*/
-		public double[][][] getTabProcessM() {
+		public double[][] getTabProcessM() {
 			return p1;
 		}
 		
 		/** @return le tableau des processing time pour le niveau 2*/
-		public double[][][] getTabProcessF() {
+		public double[][] getTabProcessF() {
 			return p2;
 		}
 		
@@ -202,7 +212,22 @@ public class InstancesMachines {
 			return fileName;
 		}
 		
-
+		/**
+		 * @return Renvoie le nom du fichier chargé.
+		 */
+		public String getFile1Name() 
+		{
+			return fileName1;
+		}
+		
+		/**
+		 * @return Renvoie le nom du fichier chargé.
+		 */
+		public String getFile2Name() 
+		{
+			return fileName2;
+		}
+		
 		// --------------------------------------
 		// ------------ CONSTRUCTEUR ------------
 		// --------------------------------------
@@ -216,44 +241,57 @@ public class InstancesMachines {
 		 * @throws IOException
 		 *           Exception retournée en cas d'erreur de lecture dans le fichier.
 		 */
-		public InstancesMachines(String fName) throws IOException
+		public InstancesMachines(String fName, String fName1, String fName2) throws IOException
 		{
 			fileName = fName;
+			fileName1 = fName1;
+			fileName2 = fName2;
+			
 			read();
+			read1();
+			read2();
+			
 		}
-		
+	
 
 		// --------------------------------------
 		// -------------- METHODES --------------
 		// --------------------------------------
 
+		
+		/**
+		 * méthode pour lire le document "datainit_DD_PEN.txt"
+		 * @throws IOException
+		 */
 		private void read() throws IOException {
 
 			File mfile = new File(fileName);
 			if (!mfile.exists()) {
 				throw new IOException("Le fichier saisi : "+ fileName + ", n'existe pas.");
 			}
+			
 			Scanner sc = new Scanner(mfile);
 
 			String line;
+			
 			do {
 				line = sc.nextLine();
 				System.err.println(line);
 			}
-			while (!line.startsWith("DIMENSION"));
+			while (!line.startsWith("NOMBRE_DE_JOBS"));
 			Scanner lineSc = new Scanner(line);
 			lineSc.next();
 			if (!lineSc.hasNextInt()) { 
 				lineSc.next();
 			}
-			nbSommets =lineSc.nextInt();
-			coordX = new double[nbSommets];
-			coordY = new double[nbSommets];
-			labels = new String[nbSommets];
-			demande = new int[nbSommets];
+			n =lineSc.nextInt();
+			
+//			coordX = new double[nbSommets];
+//			coordY = new double[nbSommets];
+//			labels = new String[nbSommets];
+//			demande = new int[nbSommets];
 
-
-			while (!line.startsWith("NB_VEHICULES")) {
+			while (!line.startsWith("NOMBRE_DE_MACHINES_M")) {
 				line = sc.nextLine();
 				System.err.println(line);
 			}
@@ -263,26 +301,141 @@ public class InstancesMachines {
 			if (!lineSc.hasNextInt()) {
 				lineSc.next();
 			}
-			int nbVehicules = lineSc.nextInt();
-			capaVehicule = new int[nbVehicules];
+			int M = lineSc.nextInt();
+			//capaVehicule = new int[nbVehicules];
+			
 
-			while (!line.startsWith("SECTION_COORD_NOEUDS")) {
+			while (!line.startsWith("NOMBRE_DE_MACHINES_F")) {
+				line = sc.nextLine();
+				System.err.println(line);
+			}
+			lineSc.close();
+			lineSc = new Scanner(line);
+			lineSc.next();
+			if (!lineSc.hasNextInt()) {
+				lineSc.next();
+			}
+			int F = lineSc.nextInt();
+			//capaVehicule = new int[nbVehicules];
+			
+
+			while (!line.startsWith("NOMBRE_DE_NIVEAUX")) {
+				line = sc.nextLine();
+				System.err.println(line);
+			}
+			lineSc.close();
+			lineSc = new Scanner(line);
+			lineSc.next();
+			if (!lineSc.hasNextInt()) {
+				lineSc.next();
+			}
+			int L = lineSc.nextInt();
+			//capaVehicule = new int[nbVehicules];
+
+			
+			while (!line.startsWith("DUE_DATE")) {
 				line = sc.nextLine();
 				System.err.println(line);
 			}
 			line = sc.nextLine();
 
 			int idx = 0;
-			for (int s=0;s<nbSommets;s++){
-				assert(idx<nbSommets);//?????????????????
+			for (int s=0;s<n;s++){
+				assert(idx<n);//?????????????????
 				lineSc = new Scanner(line);
 				lineSc.useLocale(Locale.US);//??????????????
-				labels[idx] = lineSc.next();
-				coordX[idx] = lineSc.nextDouble();
-				coordY[idx] = lineSc.nextDouble();
+				d[idx] = lineSc.nextDouble();
 				line = sc.nextLine();
 				idx++;
 			}
+			
+			while (!line.startsWith("PENALITE")) {
+				line = sc.nextLine();
+				System.err.println(line);
+			}
+			line = sc.nextLine();
+			
+			int idx1 = 0;
+			for (int s=0;s<n;s++){
+				assert(idx1<n);//?????????????????
+				lineSc = new Scanner(line);
+				lineSc.useLocale(Locale.US);//??????????????
+				pen[idx1] = lineSc.nextDouble();
+				line = sc.nextLine();
+				idx1++;
+			}
+			
+			while (!line.startsWith("PROCESSING_TIME")) {
+				line = sc.nextLine();
+				System.err.println(line);
+			}
+			line = sc.nextLine();
+			
+			while (!line.startsWith("NIVEAU_1")) {
+				line = sc.nextLine();
+				System.err.println(line);
+			}
+			line = sc.nextLine();
+			
+			while (!line.startsWith("JOBS")) {
+				line = sc.nextLine();
+				System.err.println(line);
+			}
+			
+			int noMach = 0;
+			
+			while(noMach<M)
+			{
+				line = sc.nextLine();
+				int idx2 = 0;
+			
+				for (int s=0;s<n;s++)
+				{
+					assert(idx2<n);//?????????????????
+					lineSc = new Scanner(line);
+					lineSc.useLocale(Locale.US);//??????????????
+					p1[idx2][noMach+1] = lineSc.nextDouble();
+					line = sc.nextLine();
+					idx2++;
+					
+				}
+					
+				noMach++;
+			}
+			
+			while (!line.startsWith("NIVEAU_2")) {
+				line = sc.nextLine();
+				System.err.println(line);
+			}
+				
+			int noMachF = 1;
+			
+			while(noMachF<=F)
+			{
+				while(!line.startsWith("F"+noMachF)){
+				line = sc.nextLine();
+				System.err.println(line);
+				}
+				int idx2 = 0;
+			
+				for (int s=0;s<n;s++)
+				{
+					assert(idx2<n);//?????????????????
+					lineSc = new Scanner(line);
+					lineSc.useLocale(Locale.US);//??????????????
+					p2[idx2][noMachF+1] = lineSc.nextDouble();
+					line = sc.nextLine();
+					idx2++;
+					
+				}
+					
+				noMachF++;
+			}
+			
+			//************************************************************************//
+			//******************RESTE*DU*DOC*TEXTE*A*FAIRE****************************//
+			//************************************************************************//
+			
 
 			// Création de la matrice de distances
 			distances = new long[nbSommets][]; 
@@ -338,6 +491,29 @@ public class InstancesMachines {
 			}
 			lineSc.close();
 			sc.close();
+		}
+		
+		/**
+		 * méthode pour lire "processingtime_data.txt"
+		 * @throws IOException
+		 */
+		private void read1() throws IOException 
+		{
+			
+		//TODO
+			
+		}
+		
+		
+		/**
+		 * méthode pour lire le document "Setuptime_data.txt"
+		 * @throws IOException
+		 */
+		private void read2() throws IOException 
+		{
+		
+		//TODO	
+			
 		}
 
 		/** Calcule la distance entre deux sommets */
