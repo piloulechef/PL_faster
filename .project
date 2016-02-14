@@ -14,21 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>instances/Setuptime_data.txt</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Dropbox/FASTER/PL/Setuptime_data.txt</locationURI>
-		</link>
-		<link>
-			<name>instances/datainit_DD_PEN.txt</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Dropbox/FASTER/PL/datainit_DD_PEN.txt</locationURI>
-		</link>
-		<link>
-			<name>instances/processingtime_data.txt</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Dropbox/FASTER/PL/processingtime_data.txt</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>

@@ -77,6 +77,7 @@ public class InstancesMachines {
 		public double getBigM() {
 			
 			//TODO
+			return 0;
 			
 		}
 		
@@ -129,7 +130,7 @@ public class InstancesMachines {
 		{
 			
 			//TODO
-			
+			return 0;
 		}
 			
 		/**
@@ -142,7 +143,7 @@ public class InstancesMachines {
 		 **/
 		public double getP2(int i, int f) throws Exception 
 		{
-			
+			return 0;
 			//TODO
 	
 		}
@@ -159,7 +160,7 @@ public class InstancesMachines {
 		{
 			
 			//TODO
-	
+			return 0 ;
 		}
 		
 		/**
@@ -172,7 +173,7 @@ public class InstancesMachines {
 		 **/
 		public double getS2(int i, int f) throws Exception 
 		{
-			
+			return 0 ; 
 			//TODO
 	
 		}
@@ -186,7 +187,7 @@ public class InstancesMachines {
 		 **/
 		public double getDueDate(int i) throws Exception 
 		{
-			
+			return 0 ; 
 			//TODO
 	
 		}
@@ -199,7 +200,7 @@ public class InstancesMachines {
 		 **/
 		public double getPenalite(int i) throws Exception 
 		{
-			
+			return 0 ; 
 			//TODO
 	
 		}
@@ -248,8 +249,8 @@ public class InstancesMachines {
 			fileName2 = fName2;
 			
 			read();
-			read1();
-			read2();
+			//read1();
+			//read2();
 			
 		}
 	
@@ -423,7 +424,7 @@ public class InstancesMachines {
 					assert(idx2<n);//?????????????????
 					lineSc = new Scanner(line);
 					lineSc.useLocale(Locale.US);//??????????????
-					p2[idx2][noMachF+1] = lineSc.nextDouble();
+					p2[idx2][noMachF-1] = lineSc.nextDouble();
 					line = sc.nextLine();
 					idx2++;
 					
@@ -436,168 +437,169 @@ public class InstancesMachines {
 			//******************RESTE*DU*DOC*TEXTE*A*FAIRE****************************//
 			//************************************************************************//
 			
+//
+//			// Création de la matrice de distances
+//			distances = new long[nbSommets][]; 
+//			for (int i = 0; i < nbSommets; i++) {
+//				distances[i] = new long[nbSommets];
+//			}
+//
+//			// Calcul des distances 
+//			for (int i = 0; i < nbSommets; i++) {
+//				distances[i][i] = 0;
+//				for (int j = i + 1; j < nbSommets; j++) {
+//					long dist = distance(i,j);
+//					//				System.out.println("Distance " + i + " " +j + ": " + dist);
+//					distances[i][j] = dist;
+//					distances[j][i] = dist;
+//				}
+//			}
+//
+//
+//			while (!line.startsWith("SECTION_DEMANDE")) {
+//				line = sc.nextLine();
+//				System.err.println(line);
+//			}
+//			line = sc.nextLine();
+//
+//			idx = 0;
+//			for (int s=0;s<nbSommets;s++){
+//				assert(idx<nbSommets);//???????????????
+//				lineSc = new Scanner(line);
+//				lineSc.useLocale(Locale.US);//??????????????
+//				lineSc.next();
+//				demande[idx] = lineSc.nextInt();
+//				line = sc.nextLine();
+//				idx++;
+//			}
+//			
+//			
+//			while (!line.startsWith("SECTION_CAPACITE")) {
+//				line = sc.nextLine();
+//				System.err.println(line);
+//			}
+//			line = sc.nextLine();
+//
+//			idx = 0;
+//			for (int s=0;s<nbVehicules;s++){
+//				assert(idx<nbSommets);
+//				lineSc = new Scanner(line);
+//				lineSc.useLocale(Locale.US);
+//				lineSc.next();
+//				capaVehicule[idx] = lineSc.nextInt();
+//				line = sc.nextLine();
+//				idx++;
+//			}
+//			lineSc.close();
+//			sc.close();
+//		}
+//		
+//		/**
+//		 * méthode pour lire "processingtime_data.txt"
+//		 * @throws IOException
+//		 */
+//		private void read1() throws IOException 
+//		{
+//			
+//		//TODO
+//			
+//		}
+//		
+//		
+//		/**
+//		 * méthode pour lire le document "Setuptime_data.txt"
+//		 * @throws IOException
+//		 */
+//		private void read2() throws IOException 
+//		{
+//		
+//		//TODO	
+//			
+//		}
+//
+//		/** Calcule la distance entre deux sommets */
+//		private long distance(int i, int j) {
+//			double dx = coordX[i] - coordX[j];
+//			double dy = coordY[i] - coordY[j];
+//			return (long) Math.rint(Math.hypot(dx, dy));
+//		}
+//
+//		/**
+//		 * 
+//		 * @return la plus grande abscisse
+//		 */
+//		public double getMaxX() {
+//
+//			return getMax(coordX);
+//		}
+//
+//		/**
+//		 * 
+//		 * @return la plus grande ordonnée
+//		 */
+//		public double getMaxY() {
+//
+//			return getMax(coordY);
+//		}
+//
+//		/**
+//		 * 
+//		 * @return la plus petite abscisse
+//		 */
+//		public double getMinX() {
+//
+//			return getMin(coordX);
+//		}
+//
+//		/**
+//		 * 
+//		 * @return la plus petite ordonnée
+//		 */
+//		public double getMinY() {
+//
+//			return getMin(coordY);
+//		}
+//
+//		private double getMax(double[] array) {
+//			double maxVal = Double.MIN_VALUE;
+//			for (int i = 0; i < nbSommets; i++) {
+//				if (maxVal < array[i])
+//					maxVal = array[i];
+//			}
+//
+//			return maxVal;
+//		}
+//
+//		private double getMin(double[] array) {
+//			double minVal = Double.MAX_VALUE;
+//			for (int i = 0; i < nbSommets; i++) {
+//				if (minVal > array[i])
+//					minVal = array[i];
+//			}
+//
+//			return minVal;
+//		}
+//
+//		/**
+//		 * Imprime la solution sur la sortie out.
+//		 * 
+//		 * @param out
+//		 *          : sortie
+//		 */
+//		public void print(PrintStream out) {
+//
+//			out.println("Matrice de distances :");
+//			for (int i = 0; i < nbSommets; i++) {
+//				for (int j =0; j < nbSommets; j++) {
+//					out.print(distances[i][j]+ ";"); 
+//				}
+//				out.println();
+//			}
+//			out.println();
+//		}
+//
+//	}
+//
 
-			// Création de la matrice de distances
-			distances = new long[nbSommets][]; 
-			for (int i = 0; i < nbSommets; i++) {
-				distances[i] = new long[nbSommets];
-			}
-
-			// Calcul des distances 
-			for (int i = 0; i < nbSommets; i++) {
-				distances[i][i] = 0;
-				for (int j = i + 1; j < nbSommets; j++) {
-					long dist = distance(i,j);
-					//				System.out.println("Distance " + i + " " +j + ": " + dist);
-					distances[i][j] = dist;
-					distances[j][i] = dist;
-				}
-			}
-
-
-			while (!line.startsWith("SECTION_DEMANDE")) {
-				line = sc.nextLine();
-				System.err.println(line);
-			}
-			line = sc.nextLine();
-
-			idx = 0;
-			for (int s=0;s<nbSommets;s++){
-				assert(idx<nbSommets);//???????????????
-				lineSc = new Scanner(line);
-				lineSc.useLocale(Locale.US);//??????????????
-				lineSc.next();
-				demande[idx] = lineSc.nextInt();
-				line = sc.nextLine();
-				idx++;
-			}
-			
-			
-			while (!line.startsWith("SECTION_CAPACITE")) {
-				line = sc.nextLine();
-				System.err.println(line);
-			}
-			line = sc.nextLine();
-
-			idx = 0;
-			for (int s=0;s<nbVehicules;s++){
-				assert(idx<nbSommets);
-				lineSc = new Scanner(line);
-				lineSc.useLocale(Locale.US);
-				lineSc.next();
-				capaVehicule[idx] = lineSc.nextInt();
-				line = sc.nextLine();
-				idx++;
-			}
-			lineSc.close();
-			sc.close();
-		}
-		
-		/**
-		 * méthode pour lire "processingtime_data.txt"
-		 * @throws IOException
-		 */
-		private void read1() throws IOException 
-		{
-			
-		//TODO
-			
-		}
-		
-		
-		/**
-		 * méthode pour lire le document "Setuptime_data.txt"
-		 * @throws IOException
-		 */
-		private void read2() throws IOException 
-		{
-		
-		//TODO	
-			
-		}
-
-		/** Calcule la distance entre deux sommets */
-		private long distance(int i, int j) {
-			double dx = coordX[i] - coordX[j];
-			double dy = coordY[i] - coordY[j];
-			return (long) Math.rint(Math.hypot(dx, dy));
-		}
-
-		/**
-		 * 
-		 * @return la plus grande abscisse
-		 */
-		public double getMaxX() {
-
-			return getMax(coordX);
-		}
-
-		/**
-		 * 
-		 * @return la plus grande ordonnée
-		 */
-		public double getMaxY() {
-
-			return getMax(coordY);
-		}
-
-		/**
-		 * 
-		 * @return la plus petite abscisse
-		 */
-		public double getMinX() {
-
-			return getMin(coordX);
-		}
-
-		/**
-		 * 
-		 * @return la plus petite ordonnée
-		 */
-		public double getMinY() {
-
-			return getMin(coordY);
-		}
-
-		private double getMax(double[] array) {
-			double maxVal = Double.MIN_VALUE;
-			for (int i = 0; i < nbSommets; i++) {
-				if (maxVal < array[i])
-					maxVal = array[i];
-			}
-
-			return maxVal;
-		}
-
-		private double getMin(double[] array) {
-			double minVal = Double.MAX_VALUE;
-			for (int i = 0; i < nbSommets; i++) {
-				if (minVal > array[i])
-					minVal = array[i];
-			}
-
-			return minVal;
-		}
-
-		/**
-		 * Imprime la solution sur la sortie out.
-		 * 
-		 * @param out
-		 *          : sortie
-		 */
-		public void print(PrintStream out) {
-
-			out.println("Matrice de distances :");
-			for (int i = 0; i < nbSommets; i++) {
-				for (int j =0; j < nbSommets; j++) {
-					out.print(distances[i][j]+ ";"); 
-				}
-				out.println();
-			}
-			out.println();
-		}
-
-	}
-
-
+}
 }
