@@ -12,7 +12,7 @@ public class test2 {
 	
 	try
 	{
-	    File f = new File ("annuaire.txt");
+	    File f = new File ("annuaire");
 	    Scanner scanner = new Scanner (f);
 	 
 	    String name;

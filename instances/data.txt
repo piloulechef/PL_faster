@@ -1,4 +1,4 @@
-NOM	:	datainit_DD_PEN
+NOM	:	data
 NOMBRE_DE_JOBS	:	20
 NOMBRE_DE_MACHINES_M	:	1
 NOMBRE_DE_MACHINES_F	:	4
@@ -160,6 +160,7 @@ F4
 19	9				
 
 SETUP_TIME	
+NIVEAU1
 M1	
 JOB_1	
 0	0
@@ -560,7 +561,9 @@ JOB_19
 17	10
 18	5
 19	6
-	
+
+NIVEAU2	
+
 F1	
 	
 JOB_1	

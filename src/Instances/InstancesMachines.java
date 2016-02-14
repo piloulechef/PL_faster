@@ -242,15 +242,10 @@ public class InstancesMachines {
 		 * @throws IOException
 		 *           Exception retournée en cas d'erreur de lecture dans le fichier.
 		 */
-		public InstancesMachines(String fName, String fName1, String fName2) throws IOException
+		public InstancesMachines(String fName) throws IOException
 		{
 			fileName = fName;
-			fileName1 = fName1;
-			fileName2 = fName2;
-			
 			read();
-			//read1();
-			//read2();
 			
 		}
 	
@@ -261,7 +256,7 @@ public class InstancesMachines {
 
 		
 		/**
-		 * méthode pour lire le document "datainit_DD_PEN.txt"
+		 * méthode pour lire le document "data.txt"
 		 * @throws IOException
 		 */
 		private void read() throws IOException {
@@ -330,7 +325,7 @@ public class InstancesMachines {
 			if (!lineSc.hasNextInt()) {
 				lineSc.next();
 			}
-			int L = lineSc.nextInt();
+			L = lineSc.nextInt();
 			//capaVehicule = new int[nbVehicules];
 
 			
@@ -433,153 +428,115 @@ public class InstancesMachines {
 				noMachF++;
 			}
 			
-			//************************************************************************//
-			//******************RESTE*DU*DOC*TEXTE*A*FAIRE****************************//
-			//************************************************************************//
 			
-//
-//			// Création de la matrice de distances
-//			distances = new long[nbSommets][]; 
-//			for (int i = 0; i < nbSommets; i++) {
-//				distances[i] = new long[nbSommets];
-//			}
-//
-//			// Calcul des distances 
-//			for (int i = 0; i < nbSommets; i++) {
-//				distances[i][i] = 0;
-//				for (int j = i + 1; j < nbSommets; j++) {
-//					long dist = distance(i,j);
-//					//				System.out.println("Distance " + i + " " +j + ": " + dist);
-//					distances[i][j] = dist;
-//					distances[j][i] = dist;
-//				}
-//			}
-//
-//
-//			while (!line.startsWith("SECTION_DEMANDE")) {
-//				line = sc.nextLine();
-//				System.err.println(line);
-//			}
-//			line = sc.nextLine();
-//
-//			idx = 0;
-//			for (int s=0;s<nbSommets;s++){
-//				assert(idx<nbSommets);//???????????????
-//				lineSc = new Scanner(line);
-//				lineSc.useLocale(Locale.US);//??????????????
-//				lineSc.next();
-//				demande[idx] = lineSc.nextInt();
-//				line = sc.nextLine();
-//				idx++;
-//			}
-//			
-//			
-//			while (!line.startsWith("SECTION_CAPACITE")) {
-//				line = sc.nextLine();
-//				System.err.println(line);
-//			}
-//			line = sc.nextLine();
-//
-//			idx = 0;
-//			for (int s=0;s<nbVehicules;s++){
-//				assert(idx<nbSommets);
-//				lineSc = new Scanner(line);
-//				lineSc.useLocale(Locale.US);
-//				lineSc.next();
-//				capaVehicule[idx] = lineSc.nextInt();
-//				line = sc.nextLine();
-//				idx++;
-//			}
-//			lineSc.close();
-//			sc.close();
-//		}
-//		
-//		/**
-//		 * méthode pour lire "processingtime_data.txt"
-//		 * @throws IOException
-//		 */
-//		private void read1() throws IOException 
-//		{
-//			
-//		//TODO
-//			
-//		}
-//		
-//		
-//		/**
-//		 * méthode pour lire le document "Setuptime_data.txt"
-//		 * @throws IOException
-//		 */
-//		private void read2() throws IOException 
-//		{
-//		
-//		//TODO	
-//			
-//		}
-//
-//		/** Calcule la distance entre deux sommets */
-//		private long distance(int i, int j) {
-//			double dx = coordX[i] - coordX[j];
-//			double dy = coordY[i] - coordY[j];
-//			return (long) Math.rint(Math.hypot(dx, dy));
-//		}
-//
-//		/**
-//		 * 
-//		 * @return la plus grande abscisse
-//		 */
-//		public double getMaxX() {
-//
-//			return getMax(coordX);
-//		}
-//
-//		/**
-//		 * 
-//		 * @return la plus grande ordonnée
-//		 */
-//		public double getMaxY() {
-//
-//			return getMax(coordY);
-//		}
-//
-//		/**
-//		 * 
-//		 * @return la plus petite abscisse
-//		 */
-//		public double getMinX() {
-//
-//			return getMin(coordX);
-//		}
-//
-//		/**
-//		 * 
-//		 * @return la plus petite ordonnée
-//		 */
-//		public double getMinY() {
-//
-//			return getMin(coordY);
-//		}
-//
-//		private double getMax(double[] array) {
-//			double maxVal = Double.MIN_VALUE;
-//			for (int i = 0; i < nbSommets; i++) {
-//				if (maxVal < array[i])
-//					maxVal = array[i];
-//			}
-//
-//			return maxVal;
-//		}
-//
-//		private double getMin(double[] array) {
-//			double minVal = Double.MAX_VALUE;
-//			for (int i = 0; i < nbSommets; i++) {
-//				if (minVal > array[i])
-//					minVal = array[i];
-//			}
-//
-//			return minVal;
-//		}
-//
+			while (!line.startsWith("SETUP_TIME")) {
+				line = sc.nextLine();
+				System.err.println(line);
+			}
+			line = sc.nextLine();
+			
+			while (!line.startsWith("NIVEAU1")) {
+				line = sc.nextLine();
+				System.err.println(line);
+			}
+			line = sc.nextLine();
+			
+			int noMachM = 1; 
+			
+			while(noMachM<=M){
+				
+				while(!line.startsWith("M"+noMachM)){
+					line = sc.nextLine();
+					System.err.println(line);
+					}
+					line = sc.nextLine();
+			
+					int noJobs = 1;
+			
+				while(noJobs<=n)
+				{
+					while(!line.startsWith("JOB_"+noJobs))
+					{
+						line = sc.nextLine();
+						System.err.println(line);
+					}
+					
+				line = sc.nextLine();
+
+				int idx2 = 0;
+			
+				for (int s=0;s<n;s++)
+				{
+					assert(idx2<n);//?????????????????
+					lineSc = new Scanner(line);
+					lineSc.useLocale(Locale.US);//??????????????
+					s1[noJobs-1][idx2][noMachM] = lineSc.nextDouble();
+					line = sc.nextLine();
+					idx2++;
+					
+				}
+					
+				noJobs++;
+			}
+			noMachM ++ ; 
+			}
+			
+			
+			while (!line.startsWith("NIVEAU2")) {
+				line = sc.nextLine();
+				System.err.println(line);
+			}
+			line = sc.nextLine();
+			
+			int nosMachF = 1; 
+			
+			while(nosMachF<=F){
+				
+				while(!line.startsWith("F"+nosMachF)){
+					line = sc.nextLine();
+					System.err.println(line);
+					}
+					line = sc.nextLine();
+			
+					int noJobs = 1;
+			
+				while(noJobs<=n)
+				{
+					while(!line.startsWith("JOB_"+noJobs))
+					{
+						line = sc.nextLine();
+						System.err.println(line);
+					}
+					
+				line = sc.nextLine();
+
+				int idx2 = 0;
+			
+				for (int s=0;s<n;s++)
+				{
+					assert(idx2<n);//?????????????????
+					lineSc = new Scanner(line);
+					lineSc.useLocale(Locale.US);//??????????????
+					s2[noJobs-1][idx2][nosMachF] = lineSc.nextDouble();
+					line = sc.nextLine();
+					idx2++;
+					
+				}
+					
+				noJobs++;
+			}
+			nosMachF ++ ; 
+			}
+			
+			sc.close();
+			lineSc.close();
+			
+		}
+			
+			
+//*******************************************************************
+//************EVENTUELLEMENT A FAIRE SI BESOIN **********************
+//*******************************************************************		
 //		/**
 //		 * Imprime la solution sur la sortie out.
 //		 * 
@@ -601,5 +558,4 @@ public class InstancesMachines {
 //	}
 //
 
-}
 }
