@@ -205,22 +205,6 @@ public class InstancesMachines {
 			return fileName;
 		}
 		
-		/**
-		 * @return Renvoie le nom du fichier chargé.
-		 */
-		public String getFile1Name() 
-		{
-			return fileName1;
-		}
-		
-		/**
-		 * @return Renvoie le nom du fichier chargé.
-		 */
-		public String getFile2Name() 
-		{
-			return fileName2;
-		}
-		
 		// --------------------------------------
 		// ------------ CONSTRUCTEUR ------------
 		// --------------------------------------

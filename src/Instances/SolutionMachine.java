@@ -1,8 +1,5 @@
 package Instances;
 
-import instance.Instance;
-
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -58,16 +55,32 @@ public class SolutionMachine {
 			this.affectation = affectation;
 		}
 
-		public int getNbCamion() {
-			return nbCamion;
+		public int getM() {
+			return M;
+		}
+		
+		public void setM(int M) {
+			this.M = M;
 		}
 
-		public void setNbCamion(int nbCamion) {
-			this.nbCamion = nbCamion;
+		public int getF() {
+			return F;
+		}
+		
+		public void setF(int F) {
+			this.F = F;
+		}
+		
+		public int getn() {
+			return n;
+		}
+		
+		public void setn(int n) {
+			this.n = n;
 		}
 
 		/**
-		 * @return Longueur de la tournée. Attention il faut soit maintenir cette
+		 * @return makespan + pénalités. Attention il faut soit maintenir cette
 		 *         valeur correcte lorsqu'on modifie la solution soit la recalculer
 		 *         (méthodes <code>evaluate</code>) pour que la valeur soit correcte.
 		 */
@@ -90,24 +103,24 @@ public class SolutionMachine {
 		 * 
 		 * @return Problème associé à la solution
 		 */
-		public Instance getInstance() {
+		public InstancesMachines getInstance() {
 			return instance;
 		}
 
 		/**
 		 * @param position
-		 *          position pour laquelle on veut connaître le numéro de sommet.
-		 *        @param idCamion numéro du camion
-		 * @return Retourne le numéro du sommet en ième position dans la tournée du camion k.
+		 *          position pour laquelle on veut savoir le job dans le tableau
+		 *        @param idMachine numéro de machine
+		 * @return Retourne le numéro du job en ième position dans le planning de la machine M.
 		 * @throws Exception
 		 *           retourne une exception si i n'est pas un numéro de position
 		 *           valide.
 		 */
-		public int getSolution(int position, int idCamion)  throws Exception {
-			if ((position<0) || (position>nbSommets-1))
-				throw new Exception("Erreur Instance.getSolution : " + position + " n\'est pas un numéro de sommet compris entre 0 et "
-						+ (nbSommets-1));
-			return affectation.get(idCamion)[position];
+		public int getSolution(int  position, int idMachine)  throws Exception {
+			if ((position<0) || (position>n))
+				throw new Exception("Erreur Instance.getSolution : " + position + " n\'est pas un numéro de job compris entre 1 et "
+						+ (n-1));
+			return affectation.get(idMachine)[position];
 		}
 
 
@@ -124,15 +137,24 @@ public class SolutionMachine {
 		// --------------------------------------
 
 		/** Crée un objet représentant une solution du problème <code>inst</code>. */
-		public Solution(Instance inst, int nbCamion) {
+		public SolutionMachine(InstancesMachines inst, int n, int M, int F) {
 			instance = inst;
-			nbSommets = inst.getNbSommets();
-			this.nbCamion = nbCamion;
+			n = inst.getNbJobs();
+			M = inst.getNbM();
+			F = inst.getNbF();
+			this.n = n;
+			this.M= M;
+			this.F= F;
 			affectation = new ArrayList<int[]>();
-			for (int i=0;i<nbCamion;i++){
-				int[] route = new int[nbSommets];
-				Arrays.fill(route,-1);
-				affectation.add(route);
+			for (int i=0;i<M;i++){
+				int[] ordoM = new int[n];
+				Arrays.fill(ordoM,-1);
+				affectation.add(ordoM);
+			}
+			for (int i=M;i<F;i++){
+				int[] ordoF = new int[n];
+				Arrays.fill(ordoF,-1);
+				affectation.add(ordoF);
 			}
 		}
 
@@ -141,60 +163,60 @@ public class SolutionMachine {
 		// --------------------------------------
 
 		/**
-		 * Insère le sommet s en ième position dans la tournée k.
+		 * Insère le job j en ième position dans sur la machine m.
 		 * 
-		 * @param s
-		 *          numéro du sommet à insérer.
+		 * @param j
+		 *          numéro de job à insérer.
 		 * @param i
-		 *          position d'insertion du sommet s.
-		 *          @param k : numéro de la tournée
+		 *          position d'insertion du job j.
+		 *          @param m : numéro de la machine
 		 * @throws Exception
 		 *           retourne une exception si i n'est pas un numéro de position
 		 *           valide.
 		 */
-		public void setVertexPosition(int s, int i, int k) throws Exception {
-			if ((i<0) || (i>nbSommets-1))
-				throw new Exception("Erreur Instance.setVertexPosition(i,s) : la valeur de i : " + i + ", n\'est pas un indice compris entre 1 et "+nbSommets);
-			if ((s<0) || (s>nbSommets-1))
-				throw new Exception("Erreur Instance.setVertexPosition(i,s,k) : la valeur de s : " + s
-						+ ", n\'est pas un numéro de sommet compris entre 0 et " + (nbSommets-1));
-			affectation.get(k)[i] = s;
+		public void setVertexPosition(int j, int i, int m) throws Exception {
+			if ((i<0) || (i>n))
+				throw new Exception("Erreur Instance.setVertexPosition(i,j) : la valeur de i : " + i + ", n-\'est pas un indice compris entre 0 et "+ (n-1));
+			if ((j<0) || (j>n))
+				throw new Exception("Erreur Instance.setVertexPosition(i,j,m) : la valeur de j : " + j
+						+ ", n\'est pas un numéro de job compris entre 0 et " + (n-1));
+			affectation.get(m)[i] = j;
 		}
 
 		/**
-		 * Ajouter une tournée à la solution (en créant un nouvel élément dans la liste)
-		 * @param tournee
+		 * Ajouter une machine à l'ordo (en créant un nouvel élément dans la liste)
+		 * @param ordomach
 		 * @throws Exception
 		 */
-		public void ajouterTournee(int[] tournee) throws Exception{ 
-			if (tournee.length != nbSommets)
-				throw new Exception("La tournée ajoutée n'a pas la bonne dimension")	;
-			affectation.add(tournee);
+		public void ajouterTournee(int[] ordomach) throws Exception{ 
+			if (ordomach.length != n)
+				throw new Exception("L'ordomachine ajouté n'a pas la bonne dimension")	;
+			affectation.add(ordomach);
 		}
 
 
 		/**
-		 * Recalcule et retourne la longueur de la tournée.
+		 * Recalcule et retourne le makspan de l'ordo.
 		 * 
 		 * @throws Exception
 		 */ 
 		public double evaluate() throws Exception {
 			objectif  = 0;
-			for (int[] route:affectation){
-				for (int i=0; i<nbSommets-1;i++){
-					if (route[i]!=-1 && route[i+1]!= -1)
-						objectif += instance.getDistances(route[i], route[i+1]);
-				}
-			}
+			
+			//TODO
+			
 			return objectif;
-		}
+		
+				}
+			
+			
+		
 
 		/**
-		 * Vérifie que la soution est une solution réalisable du TSP. Les opérations /
-		 * tests réalisés sont les suivants : <li>recalcule la longueur de la tournée
-		 * (appel à la méthode <code>evaluate</code>). <li>vérifie que chaque sommet
-		 * est servi une fois et une seule. Lorsqu'une erreur est rencontrée, les
-		 * messages d'erreurs sont accessibles en apppelant la méthode
+		 * Vérifie que la soution est une solution réalisable du problème. Les opérations /
+		 * tests réalisés sont les suivants : 
+		 *  Lorsqu'une erreur est rencontrée, les messages d'erreurs sont accessibles 
+		 *  en apppelant la méthode
 		 * <code>getError()</code>.
 		 * 
 		 * @return Renvoie le booleen <code>true</code> si la solution est valide,
@@ -202,47 +224,8 @@ public class SolutionMachine {
 		 * @throws Exception
 		 */
 		public boolean validate() throws Exception {
-			boolean result = true;
-			error = "";
-			int[] occurences = new int[nbSommets];
-			Arrays.fill(occurences, 0);
-			for (int idRoute =0;idRoute < affectation.size();idRoute++){
-				int[] route = affectation.get(idRoute);
-				if (route[0] != 0){
-					error += "Erreur : le sommet 0 n'est pas visité en premier pour la route " + ".\n";
-					result = false;
-				}
-				for (int i=0; i<nbSommets;i++){
-					if (route[i]!=-1){
-						occurences[route[i]]++;
-					}
-					else
-					{
-						if (route[i-1] != 0){
-							error += "Erreur : le sommet 0 n'est pas visité en dernier pour la route " + ".\n";
-							result = false;
-						}
-						i=nbSommets;
-					}
-				}
-				if (route[nbSommets-1] != 0 && route[nbSommets-1]!= -1){
-					error += "Erreur : le sommet 0 n'est pas visité en dernier pour la route " + ".\n";
-					result = false;
-				}
-			}
-		
-			for (int i=1; i<nbSommets;i++){
-				if (occurences[i] !=1) {
-					error += "Erreur : le sommet " + (i + 1) + " est visité " + occurences[i] + " fois.\n";
-					result = false;
-				} 
-			}
-			evaluate();
-			if (result)
-				error += "La solution est réalisable.";
-			else 
-				error += "La solution n'est pas réalisable.";
-			return result;
+			return false;
+			//TODO??
 		}
 
 
@@ -252,21 +235,10 @@ public class SolutionMachine {
 		 * @param out
 		 *          : sortie
 		 */
-		public void print(PrintStream out) {
-			out.println("Résolution de longueur " + objectif + ", solution :");
-			int index = 0;
-			for (int[] route:affectation){
-
-				out.print("Route "+index + " : ");
-				out.print(route[0]);
-				for (int i = 1; i< nbSommets;i++) {
-					if (route[i] != -1)
-						out.print("-"+route[i]);			
-				}
-				out.println();
-				index++;
-			}
-
+		public void print() {
+			
+			//TODO
+			
 		}
 
 
