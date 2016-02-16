@@ -128,9 +128,7 @@ public class InstancesMachines {
 		 **/
 		public double getP1(int i, int m) throws Exception 
 		{
-			
-			//TODO
-			return 0;
+			return p1[i][m];
 		}
 			
 		/**
@@ -143,8 +141,7 @@ public class InstancesMachines {
 		 **/
 		public double getP2(int i, int f) throws Exception 
 		{
-			return 0;
-			//TODO
+			return p2[i][f];
 	
 		}
 		
@@ -156,11 +153,9 @@ public class InstancesMachines {
 		 * @return le setup time du job i sur la machine m au niveau 1
 		 * @throws Exception
 		 **/
-		public double getS1(int i, int m) throws Exception 
+		public double getS1(int i, int j, int m) throws Exception 
 		{
-			
-			//TODO
-			return 0 ;
+			return s1[i][j][m];
 		}
 		
 		/**
@@ -171,10 +166,9 @@ public class InstancesMachines {
 		 * @return le setup time du job i sur la machine m au niveau 2
 		 * @throws Exception
 		 **/
-		public double getS2(int i, int f) throws Exception 
+		public double getS2(int i,int j, int f) throws Exception 
 		{
-			return 0 ; 
-			//TODO
+			return s2[i][j][f];
 	
 		}
 		
@@ -187,8 +181,7 @@ public class InstancesMachines {
 		 **/
 		public double getDueDate(int i) throws Exception 
 		{
-			return 0 ; 
-			//TODO
+			return d[i];
 	
 		}
 		
@@ -200,8 +193,7 @@ public class InstancesMachines {
 		 **/
 		public double getPenalite(int i) throws Exception 
 		{
-			return 0 ; 
-			//TODO
+			return pen[i];
 	
 		}
 
