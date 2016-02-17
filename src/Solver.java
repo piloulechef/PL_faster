@@ -1,12 +1,12 @@
-    import ilog.concert.IloException;
-    	import ilog.concert.IloLinearNumExpr;
-    	import ilog.concert.IloNumVar;
-    	import ilog.concert.IloObjectiveSense;
-    	import ilog.cplex.IloCplex;
-    	import ilog.cplex.IloCplex.DoubleParam;
+import ilog.concert.IloException;
+import ilog.concert.IloLinearNumExpr;
+import ilog.concert.IloNumVar;
+import ilog.concert.IloObjectiveSense;
+import ilog.cplex.IloCplex;
+import ilog.cplex.IloCplex.DoubleParam;
 
-    	import java.text.DecimalFormat;
-    	import java.text.DecimalFormatSymbols;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
     	public class Solver {
 
@@ -70,8 +70,8 @@
         	    };
    
     		/* temps de process du job i sur la machine k au niveau 2 */
-    		double [] d = {1000,1000,1000,1000,1000,1000,1000}; /* due-dates de chaque job */
-    		double [] pen = {1,2,3,4,5,6}; /* penalit� de retard */
+  //  		double [] d = {1000,1000,1000,1000,1000,1000,1000}; /* due-dates de chaque job */
+   // 		double [] pen = {1,2,3,4,5,6}; /* penalit� de retard */
 
     	    // Création de l'environnement Cplex
     	    IloCplex cplex = new IloCplex();
@@ -98,7 +98,7 @@
     		    for (int j = 0; j <= n; j++)
     			    for (int k = 0; k < M; k++)
     			    	if (i!=j) {
-    			    	x1[i][j][k] = cplex.intVar(0,1, "x1" + i+"_"+j+"_"+k);
+    			    	x1[i][j][k] = cplex.intVar(0,1, "x1(" + i+"_"+j+"_"+k+")");
     			    	}
     			    	else { 
         			    x1[i][j][k] = cplex.intVar(0,0);
@@ -110,14 +110,14 @@
     		    for (int j = 0; j <= n; j++)
     			    for (int k = 0; k < F; k++)
     	    				if (i!=j) {
-    	    				x2[i][j][k] = cplex.intVar(0,1, "x1" + i+"_"+j+"_"+k);
+    	    				x2[i][j][k] = cplex.intVar(0,1, "x2(" + i+"_"+j+"_"+k+")");
     	    					}
     	    					else  {
     	    					x2[i][j][k] = cplex.intVar(0,0);
     	    					}
     	    
     	    for (int i = 0; i <= n; i++)
-    	    	for (int k = 0; k < F; k++)
+    	    	for (int k = 0; k < M; k++)
     			    	y1[i][k] = cplex.intVar(0,1, "y1" + i+"_"+k);
 
     	   for(int i = 0 ; i <= n; i++){
@@ -160,51 +160,51 @@
     		    }
 
     	    // Contrainte 3 : 
-    	    for (int i = 0; i <= n; i++) {
-    		    for (int k = 0; k < M; k++) {
-    	    IloLinearNumExpr expr = cplex.linearNumExpr();
-    	    for (int j = 0; j <= n; j++) {
-    	      expr.addTerm(1, x1[i][j][k]);
-    		    }
-  		    cplex.addEq(expr,1);
-    		   }
-    	    }
-    	    	    
-    	 // Contrainte 4: 
-    	    for (int i = 0; i <= n; i++) {
-    		    for (int k = 0; k < F; k++) {
-    	    IloLinearNumExpr expr = cplex.linearNumExpr();
-    	    for (int j = 0; j <= n; j++) {
-    	      expr.addTerm(1, x2[i][j][k]);
-    		  }
-  		  cplex.addEq(1, expr);
-
-    		 }
-    	    }
-    	    
-    		 // Contrainte 5: 
-    	    for (int i = 0; i <= n; i++) {
-    		    for (int k = 0; k < M; k++) {
-    	    IloLinearNumExpr expr = cplex.linearNumExpr();
-    	    for (int j = 0; j <= n; j++) {
-    	      expr.addTerm(1, x1[j][i][k]);
-    	    	}
-  		  cplex.addEq(1, expr);
-
-    		   }
-    	    }
-    	    	    
-    		 // Contrainte 6: 
-    	    for (int i = 0; i <= n; i++) {
-    		    for (int k = 0; k < F; k++) {
-    	    IloLinearNumExpr expr = cplex.linearNumExpr();
-    	    for (int j = 0; j <= n; j++) {
-    	      expr.addTerm(1, x2[j][i][k]);
-    	    }
-  		  cplex.addEq(1, expr);
-
-    		    }
-    	    }
+//    	    for (int i = 0; i <= n; i++) {
+//    		    for (int k = 0; k < M; k++) {
+//    	    IloLinearNumExpr expr = cplex.linearNumExpr();
+//    	    for (int j = 0; j <= n; j++) {
+//    	      expr.addTerm(1, x1[i][j][k]);
+//    		    }
+//  		    cplex.addEq(expr,1);
+//    		   }
+//    	    }
+//    	    	    
+//    	 // Contrainte 4: 
+//    	    for (int i = 0; i <= n; i++) {
+//    		    for (int k = 0; k < F; k++) {
+//    	    IloLinearNumExpr expr = cplex.linearNumExpr();
+//    	    for (int j = 0; j <= n; j++) {
+//    	      expr.addTerm(1, x2[i][j][k]);
+//    		  }
+//  		  cplex.addEq(1, expr);
+//
+//    		 }
+//    	    }
+//    	    
+//    		 // Contrainte 5: 
+//    	    for (int i = 0; i <= n; i++) {
+//    		    for (int k = 0; k < M; k++) {
+//    	    IloLinearNumExpr expr = cplex.linearNumExpr();
+//    	    for (int j = 0; j <= n; j++) {
+//    	      expr.addTerm(1, x1[j][i][k]);
+//    	    	}
+//  		  cplex.addEq(1, expr);
+//
+//    		   }
+//    	    }
+//    	    	    
+//    		 // Contrainte 6: 
+//    	    for (int i = 0; i <= n; i++) {
+//    		    for (int k = 0; k < F; k++) {
+//    	    IloLinearNumExpr expr = cplex.linearNumExpr();
+//    	    for (int j = 0; j <= n; j++) {
+//    	      expr.addTerm(1, x2[j][i][k]);
+//    	    }
+//  		  cplex.addEq(1, expr);
+//
+//    		    }
+//    	    }
     	    	    		
     	  // Contrainte 7: 
     	   for (int i = 0; i <= n; i++) {
@@ -333,11 +333,11 @@
     	   
     	      exprObj.addTerm(W[0],1);
     	      
-    	      for( int i = 0 ; i < n ; i ++){
-    	    	  exprObj.addTerm(pen[i], c[i][1]);
-    	    	  double expr = -pen[i]*d[i];
-    	    	  exprObj.setConstant(expr);
-    	      }
+//    	      for( int i = 0 ; i < n ; i ++){
+//    	    	  exprObj.addTerm(pen[i], c[i][1]);
+//    	    	  double expr = -pen[i]*d[i];
+//    	    	  exprObj.setConstant(expr);
+//    	      }
     	      
     	    cplex.addEq(exprObj, Z);
 
@@ -346,7 +346,7 @@
 
     	    // Affichage des résultats
     	    if (result) {
-    	      System.out.println("*** " + cplex.getStatus() + "\n*** Valeur trouvée: " + cplex.getObjValue() + " ***");
+    	    //  System.out.println("*** " + cplex.getStatus() + "\n*** Valeur trouvée: " + cplex.getObjValue() + " ***");
 
     	      System.out.println("La date de fin d'ordo est : " + cplex.getValue(W[0]));
     	         	   
@@ -354,15 +354,33 @@
     	      symb.setDecimalSeparator('.');
     	      DecimalFormat df = new DecimalFormat("#.00", symb);
     	      // df.setDecimalFormatSymbols()
-    	      System.out.println("Le coût total est de " + df.format(cplex.getObjValue()) + " euros");
-    	      for (int i = 0; i < n; i++) {
-    		      for (int j = 0; j < n; j++) {
+    	      System.out.println("Le coût total est de " + df.format(cplex.getObjValue()) + " min");
+    	      for (int i = 0; i <= n; i++) {
+    		      for (int j = 0; j <= n; j++) {
         		      for (int k = 0; k < M; k++) {
-    		    		  System.out.println(x1[i][j][k]);
+        		    	  if(cplex.getValue(x1[i][j][k])>0.5) {
+        		    		  System.out.println(x1[i][j][k]+"="+cplex.getValue(x1[i][j][k]));
+        		    	  }
     		  	  
     		         }
     		      }
     		    }
+    	      for (int i = 0; i <= n; i++) {
+    		      for (int j = 0; j <= n; j++) {
+        		      for (int k = 0; k < F; k++) {
+        		    	  if(cplex.getValue(x2[i][j][k])>0.5) {
+        		    		  System.out.println(x2[i][j][k]+"="+cplex.getValue(x2[i][j][k]));
+        		    	  }
+    		  	  
+    		         }
+    		      }
+    		    }
+    	      for (int i = 0; i <= n; i++) {
+    	    	  System.out.println(c[i][1]+"="+cplex.getValue(c[i][1]));	
+    	    	  //System.out.println(c[i][0]+"="+cplex.getValue(c[i][]));
+        	}
+    		      
+ 
     	        }
     	    else {
     	    	System.out.println("tata");
