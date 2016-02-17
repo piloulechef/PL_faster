@@ -1,3 +1,10 @@
+ import ilog.concert.IloException;
+import ilog.concert.IloLinearNumExpr;
+import ilog.concert.IloNumVar;
+import ilog.concert.IloObjectiveSense;
+import ilog.cplex.IloCplex;
+import ilog.cplex.IloCplex.DoubleParam;
+
 import ilog.concert.IloException;
 import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloNumVar;
@@ -8,11 +15,45 @@ import ilog.cplex.IloCplex.DoubleParam;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
+import Instances.InstancesMachines;
+import Instances.SolutionMachine;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+
     	public class Solver {
 
     	  // Temps limite en secondes
     	  private static final double TimeLimit = 100000000;
+    	  
+    	  /** Stocke la solution du problème */
+    	  private SolutionMachine solution;
+    	  
+    	  /** Donnnées du problème */
+    	  private InstancesMachines instance;
+    	  
+    	  /** Temps alloué à la résolution du problème */
+    	  private long time;
 
+    	// --------------------------------------------
+    		// --------------- ACCESSEURS -----------------
+    		// --------------------------------------------
+
+    		// Pour accéder aux attributs de la classe TSPSolver
+
+    		/** @return la solution du problème */
+    		public SolutionCapacite getSolution() {
+    			return solution;
+    		}
+
+    		/** @return Donnnées du problème de TSP */
+    		public InstanceCapacite getInstance() {
+    			return instance;
+    		}
+
+    		/** @return Temps alloué à la résolution du problème */
+    		public long getTime() {
+    			return time;
+    		}
     	  /**
     	   * @param args
     	   * @throws IloException
@@ -70,8 +111,8 @@ import java.text.DecimalFormatSymbols;
         	    };
    
     		/* temps de process du job i sur la machine k au niveau 2 */
-  //  		double [] d = {1000,1000,1000,1000,1000,1000,1000}; /* due-dates de chaque job */
-   // 		double [] pen = {1,2,3,4,5,6}; /* penalité de retard */
+    		double [] d = {1000,1000,1000,1000,1000,1000,1000}; /* due-dates de chaque job */
+    		double [] pen = {1,2,3,4,5,6}; /* penalité de retard */
 
     	    // CrÃ©ation de l'environnement Cplex
     	    IloCplex cplex = new IloCplex();
@@ -98,7 +139,7 @@ import java.text.DecimalFormatSymbols;
     		    for (int j = 0; j <= n; j++)
     			    for (int k = 0; k < M; k++)
     			    	if (i!=j) {
-    			    	x1[i][j][k] = cplex.intVar(0,1, "x1(" + i+"_"+j+"_"+k+")");
+    			    	x1[i][j][k] = cplex.intVar(0,1, "x1" + i+"_"+j+"_"+k);
     			    	}
     			    	else { 
         			    x1[i][j][k] = cplex.intVar(0,0);
@@ -110,14 +151,14 @@ import java.text.DecimalFormatSymbols;
     		    for (int j = 0; j <= n; j++)
     			    for (int k = 0; k < F; k++)
     	    				if (i!=j) {
-    	    				x2[i][j][k] = cplex.intVar(0,1, "x2(" + i+"_"+j+"_"+k+")");
+    	    				x2[i][j][k] = cplex.intVar(0,1, "x1" + i+"_"+j+"_"+k);
     	    					}
     	    					else  {
     	    					x2[i][j][k] = cplex.intVar(0,0);
     	    					}
     	    
     	    for (int i = 0; i <= n; i++)
-    	    	for (int k = 0; k < M; k++)
+    	    	for (int k = 0; k < F; k++)
     			    	y1[i][k] = cplex.intVar(0,1, "y1" + i+"_"+k);
 
     	   for(int i = 0 ; i <= n; i++){
@@ -160,51 +201,51 @@ import java.text.DecimalFormatSymbols;
     		    }
 
     	    // Contrainte 3 : 
-//    	    for (int i = 0; i <= n; i++) {
-//    		    for (int k = 0; k < M; k++) {
-//    	    IloLinearNumExpr expr = cplex.linearNumExpr();
-//    	    for (int j = 0; j <= n; j++) {
-//    	      expr.addTerm(1, x1[i][j][k]);
-//    		    }
-//  		    cplex.addEq(expr,1);
-//    		   }
-//    	    }
-//    	    	    
-//    	 // Contrainte 4: 
-//    	    for (int i = 0; i <= n; i++) {
-//    		    for (int k = 0; k < F; k++) {
-//    	    IloLinearNumExpr expr = cplex.linearNumExpr();
-//    	    for (int j = 0; j <= n; j++) {
-//    	      expr.addTerm(1, x2[i][j][k]);
-//    		  }
-//  		  cplex.addEq(1, expr);
-//
-//    		 }
-//    	    }
-//    	    
-//    		 // Contrainte 5: 
-//    	    for (int i = 0; i <= n; i++) {
-//    		    for (int k = 0; k < M; k++) {
-//    	    IloLinearNumExpr expr = cplex.linearNumExpr();
-//    	    for (int j = 0; j <= n; j++) {
-//    	      expr.addTerm(1, x1[j][i][k]);
-//    	    	}
-//  		  cplex.addEq(1, expr);
-//
-//    		   }
-//    	    }
-//    	    	    
-//    		 // Contrainte 6: 
-//    	    for (int i = 0; i <= n; i++) {
-//    		    for (int k = 0; k < F; k++) {
-//    	    IloLinearNumExpr expr = cplex.linearNumExpr();
-//    	    for (int j = 0; j <= n; j++) {
-//    	      expr.addTerm(1, x2[j][i][k]);
-//    	    }
-//  		  cplex.addEq(1, expr);
-//
-//    		    }
-//    	    }
+    	    for (int i = 0; i <= n; i++) {
+    		    for (int k = 0; k < M; k++) {
+    	    IloLinearNumExpr expr = cplex.linearNumExpr();
+    	    for (int j = 0; j <= n; j++) {
+    	      expr.addTerm(1, x1[i][j][k]);
+    		    }
+  		    cplex.addEq(expr,1);
+    		   }
+    	    }
+    	    	    
+    	 // Contrainte 4: 
+    	    for (int i = 0; i <= n; i++) {
+    		    for (int k = 0; k < F; k++) {
+    	    IloLinearNumExpr expr = cplex.linearNumExpr();
+    	    for (int j = 0; j <= n; j++) {
+    	      expr.addTerm(1, x2[i][j][k]);
+    		  }
+  		  cplex.addEq(1, expr);
+
+    		 }
+    	    }
+    	    
+    		 // Contrainte 5: 
+    	    for (int i = 0; i <= n; i++) {
+    		    for (int k = 0; k < M; k++) {
+    	    IloLinearNumExpr expr = cplex.linearNumExpr();
+    	    for (int j = 0; j <= n; j++) {
+    	      expr.addTerm(1, x1[j][i][k]);
+    	    	}
+  		  cplex.addEq(1, expr);
+
+    		   }
+    	    }
+    	    	    
+    		 // Contrainte 6: 
+    	    for (int i = 0; i <= n; i++) {
+    		    for (int k = 0; k < F; k++) {
+    	    IloLinearNumExpr expr = cplex.linearNumExpr();
+    	    for (int j = 0; j <= n; j++) {
+    	      expr.addTerm(1, x2[j][i][k]);
+    	    }
+  		  cplex.addEq(1, expr);
+
+    		    }
+    	    }
     	    	    		
     	  // Contrainte 7: 
     	   for (int i = 0; i <= n; i++) {
@@ -333,11 +374,11 @@ import java.text.DecimalFormatSymbols;
     	   
     	      exprObj.addTerm(W[0],1);
     	      
-//    	      for( int i = 0 ; i < n ; i ++){
-//    	    	  exprObj.addTerm(pen[i], c[i][1]);
-//    	    	  double expr = -pen[i]*d[i];
-//    	    	  exprObj.setConstant(expr);
-//    	      }
+    	      for( int i = 0 ; i < n ; i ++){
+    	    	  exprObj.addTerm(pen[i], c[i][1]);
+    	    	  double expr = -pen[i]*d[i];
+    	    	  exprObj.setConstant(expr);
+    	      }
     	      
     	    cplex.addEq(exprObj, Z);
 
@@ -346,7 +387,7 @@ import java.text.DecimalFormatSymbols;
 
     	    // Affichage des rÃ©sultats
     	    if (result) {
-    	    //  System.out.println("*** " + cplex.getStatus() + "\n*** Valeur trouvÃ©e: " + cplex.getObjValue() + " ***");
+    	      System.out.println("*** " + cplex.getStatus() + "\n*** Valeur trouvÃ©e: " + cplex.getObjValue() + " ***");
 
     	      System.out.println("La date de fin d'ordo est : " + cplex.getValue(W[0]));
     	         	   
@@ -354,9 +395,10 @@ import java.text.DecimalFormatSymbols;
     	      symb.setDecimalSeparator('.');
     	      DecimalFormat df = new DecimalFormat("#.00", symb);
     	      // df.setDecimalFormatSymbols()
-    	      System.out.println("Le coÃ»t total est de " + df.format(cplex.getObjValue()) + " min");
-    	      for (int i = 0; i <= n; i++) {
-    		      for (int j = 0; j <= n; j++) {
+    	      System.out.println("Le coÃ»t total est de " + df.format(cplex.getObjValue()) + " euros");
+    	      for (int i = 0; i < n; i++) {
+    		      for (int j = 0; j < n; j++) {
+
         		      for (int k = 0; k < M; k++) {
         		    	  if(cplex.getValue(x1[i][j][k])>0.5) {
         		    		  System.out.println(x1[i][j][k]+"="+cplex.getValue(x1[i][j][k]));
@@ -381,6 +423,19 @@ import java.text.DecimalFormatSymbols;
         	}
     		      
  
+    	        }
+    	    else {
+    	    	System.out.println("tata");
+    	    }
+
+    	  }
+    	}
+        		      for (int k = 0; k < M; k++) {
+    		    		  System.out.println(x1[i][j][k]);
+    		  	  
+    		         }
+    		      }
+    		    }
     	        }
     	    else {
     	    	System.out.println("tata");

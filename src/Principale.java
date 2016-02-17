@@ -18,8 +18,8 @@ public class Principale {
 	      Solver solver = new Solver();
 	      // create a new problem; data is read from file filename
 	      InstancesMachines prob = new InstancesMachines(filename);
-	      solver.setInstancesMachines(prob);
-	      solver.setSolution(new Solution(prob,0));
+	      //solver.setInstancesMachines(prob);
+	      //solver.setSolution(new Solution(prob,0));
 
 	      // print the data [uncomment if wanted]
 	      // prob.printData(System.err);
