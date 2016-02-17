@@ -76,8 +76,7 @@ public class InstancesMachines {
 		/** @return Le big M*/
 		public double getBigM() {
 			
-			//TODO
-			return 0;
+			return R;
 			
 		}
 		
@@ -248,7 +247,7 @@ public class InstancesMachines {
 		
 		do {
 			line = sc.nextLine();
-			System.err.println(line);
+			//System.err.println(line);
 		}
 		while (!line.startsWith("NOMBRE_DE_JOBS"));
 		Scanner lineSc = new Scanner(line);
@@ -256,8 +255,8 @@ public class InstancesMachines {
 		if (!lineSc.hasNextInt()) { 
 			lineSc.next();
 		}
-		//n =lineSc.nextInt();
-		System.out.println(lineSc.nextInt());
+		n =lineSc.nextInt();
+		//System.out.println(lineSc.nextInt());
 //		coordX = new double[nbSommets];
 //		coordY = new double[nbSommets];
 //		labels = new String[nbSommets];
@@ -265,7 +264,7 @@ public class InstancesMachines {
 
 		while (!line.startsWith("NOMBRE_DE_MACHINES_M")) {
 			line = sc.nextLine();
-			System.err.println(line);
+			//System.err.println(line);
 		}
 		lineSc.close();
 		lineSc = new Scanner(line);
@@ -279,7 +278,7 @@ public class InstancesMachines {
 
 		while (!line.startsWith("NOMBRE_DE_MACHINES_F")) {
 			line = sc.nextLine();
-			System.err.println(line);
+			//System.err.println(line);
 		}
 		lineSc.close();
 		lineSc = new Scanner(line);
@@ -293,7 +292,7 @@ public class InstancesMachines {
 
 		while (!line.startsWith("NOMBRE_DE_NIVEAUX")) {
 			line = sc.nextLine();
-			System.err.println(line);
+			//System.err.println(line);
 		}
 		lineSc.close();
 		lineSc = new Scanner(line);
@@ -301,10 +300,29 @@ public class InstancesMachines {
 		if (!lineSc.hasNextInt()) {
 			lineSc.next();
 		}
-		//L = lineSc.nextInt();
-		System.out.println(lineSc.nextInt());
+		L = lineSc.nextInt();
+		//System.out.println(lineSc.nextInt());
 		//capaVehicule = new int[nbVehicules];
 
+		while (!line.startsWith("BIG_M")) {
+			line = sc.nextLine();
+			//System.err.println(line);
+		}
+		lineSc.close();
+		lineSc = new Scanner(line);
+		lineSc.next();
+		if (!lineSc.hasNextInt()) {
+			lineSc.next();
+		}
+		R = lineSc.nextInt();
+		
+		double[] d = new double[n];
+		double[] pen = new double[n];
+		double[][] p1 = new double[n][M];
+		double[][] p2 = new double[n][F];
+		double[][][] s1 = new double[n][n][M];
+		double[][][] s2 = new double[n][n][F];
+		
 		
 		while (!line.startsWith("DUE_DATE")) {
 			line = sc.nextLine();
@@ -322,15 +340,18 @@ public class InstancesMachines {
 			lineSc = new Scanner(line);
 			lineSc.next();
 			lineSc.useLocale(Locale.US);//??????????????
-			//d[idx] = lineSc.nextDouble();
-			System.out.println("d["+idx+"] = "+ lineSc.nextInt());
+			double dd = lineSc.nextDouble();
+			//System.out.println("dd = " + dd);
+			d[idx] = dd;
+			//System.out.println("d["+idx+"] = "+ lineSc.nextInt());
 			line = sc.nextLine();
+			
 			idx++;
 		}
 		
 		while (!line.startsWith("PENALITE")) {
 			line = sc.nextLine();
-			System.err.println(line);
+			//System.err.println(line);
 		}
 		
 		while(!line.startsWith("0")){
@@ -344,30 +365,30 @@ public class InstancesMachines {
 			lineSc = new Scanner(line);
 			lineSc.next();
 			lineSc.useLocale(Locale.US);//??????????????
-			//pen[idx1] = lineSc.nextDouble();
-			System.out.println("pen["+idx1+"] = "+lineSc.nextDouble());
+			pen[idx1] = lineSc.nextDouble();
+			//System.out.println("pen["+idx1+"] = "+lineSc.nextDouble());
 			line = sc.nextLine();
 			idx1++;
 		}
 		
 		while (!line.startsWith("PROCESSING_TIME")) {
 			line = sc.nextLine();
-			System.err.println(line);
+			//System.err.println(line);
 		}
 		
 		while (!line.startsWith("NIVEAU_1")) {
 			line = sc.nextLine();
-			System.err.println(line);
+			//System.err.println(line);
 		}
 		
 		while (!line.startsWith("JOBS")) {
 			line = sc.nextLine();
-			System.err.println(line);
+			//System.err.println(line);
 		}
 		
 		while (!line.startsWith("M1")) {
 			line = sc.nextLine();
-			System.err.println(line);
+			//System.err.println(line);
 		}
 		
 		int noMach = 0;
@@ -387,9 +408,10 @@ public class InstancesMachines {
 				lineSc = new Scanner(line);
 				lineSc.next();
 				lineSc.useLocale(Locale.US);//??????????????
-				//p1[idx2][noMach+1] = lineSc.nextDouble();
-				int mach = noMach+1;
-				System.out.println("p1["+idx2+"]["+mach+"] = " + lineSc.nextInt());
+				p1[idx2][noMach] = lineSc.nextDouble();
+				//System.out.println("p1["+idx2+"]["+noMach+"] = " + p1[idx2][noMach]);
+				//int mach = noMach+1;
+				//System.out.println("p1["+idx2+"]["+mach+"] = " + lineSc.nextInt());
 				line = sc.nextLine();
 				idx2++;
 				
@@ -407,7 +429,7 @@ public class InstancesMachines {
 		
 		while(noMachF<=F)
 		{
-			System.out.println("F" + noMachF);
+			//System.out.println("F" + noMachF);
 			String print = "F" + noMachF;
 			while(!line.startsWith(print)){	
 			line = sc.nextLine();
@@ -426,9 +448,10 @@ public class InstancesMachines {
 				lineSc = new Scanner(line);
 				lineSc.next();
 				lineSc.useLocale(Locale.US);//??????????????
-				//p2[idx2][noMachF-1] = lineSc.nextDouble();
-				int nof = noMachF-1;
-				System.out.println("p2["+idx2+"]["+nof+"] = " + lineSc.nextInt());
+				p2[idx2][noMachF-1] = lineSc.nextDouble();
+				//System.out.println("p2["+idx2+"]["+(noMachF-1)+"] = " + p2[idx2][noMachF-1]);
+				//int nof = noMachF-1;
+				//System.out.println("p2["+idx2+"]["+nof+"] = " + lineSc.nextInt());
 				line = sc.nextLine();
 				idx2++;
 				
@@ -437,20 +460,20 @@ public class InstancesMachines {
 			noMachF++;
 			
 		}
-		System.out.println("blkacxlk");
-		System.out.println(line);
+//		System.out.println("blkacxlk");
+//		System.out.println(line);
 		//String line2 = sc.nextLine();
 		//System.out.println(line2);
-		System.out.println(!line.startsWith("SETUP_TIME"));
+		//System.out.println(!line.startsWith("SETUP_TIME"));
 		
 		while (!line.startsWith("SETUP_TIME")) {
 			line = sc.nextLine();
-			System.err.println(line);
+			//System.err.println(line);
 		}
 		
 		while (!line.startsWith("NIVEAU1")) {
 			line = sc.nextLine();
-			System.err.println(line);
+			//System.err.println(line);
 		}
 		
 		int noMachM = 1; 
@@ -459,7 +482,7 @@ public class InstancesMachines {
 			
 			while(!line.startsWith("M"+noMachM)){
 				line = sc.nextLine();
-				System.err.println(line);
+				//System.err.println(line);
 				}
 				
 		
@@ -467,7 +490,7 @@ public class InstancesMachines {
 		
 			while(noJobs<=19)
 			{
-				System.out.println("JOB_"+noJobs);
+				//System.out.println("JOB_"+noJobs);
 				while(!line.startsWith("JOB_"+noJobs))
 				{
 					line = sc.nextLine();
@@ -484,16 +507,16 @@ public class InstancesMachines {
 		
 			for (int s=0;s<=19;s++)
 			{
-				
-				
+			
 				assert(idx2<=19);//?????????????????
 				lineSc = new Scanner(line);
 				lineSc.next();
 				lineSc.useLocale(Locale.US);//??????????????
-				//s1[noJobs-1][idx2][noMachM] = lineSc.nextDouble();
-				int job=noJobs;
-				int mach = noMachM-1;
-				System.out.println("s1["+job+"]["+idx2+"]["+mach+"] = " + lineSc.nextInt());
+				s1[noJobs][idx2][noMachM-1] = lineSc.nextDouble();
+				//System.out.println("s1["+noJobs+"]["+idx2+"]["+(noMachM-1)+"] = " + s1[noJobs][idx2][noMachM-1]);
+				//int job=noJobs;
+				//int mach = noMachM-1;
+				//System.out.println("s1["+job+"]["+idx2+"]["+mach+"] = " + lineSc.nextInt());
 				line = sc.nextLine();
 				idx2++;
 				
@@ -507,7 +530,7 @@ public class InstancesMachines {
 		
 		while (!line.startsWith("NIVEAU2")) {
 			line = sc.nextLine();
-			System.err.println(line);
+			//System.err.println(line);
 		}
 		line = sc.nextLine();
 		
@@ -515,7 +538,7 @@ public class InstancesMachines {
 		
 		while(nosMachF<=F){
 			
-			System.out.println("F"+nosMachF);
+			//System.out.println("F"+nosMachF);
 			
 			while(!line.startsWith("F"+nosMachF)){
 				line = sc.nextLine();
@@ -527,7 +550,7 @@ public class InstancesMachines {
 		
 			while(noJobs<=19)
 			{
-				System.out.println("JOB_"+noJobs);
+				//System.out.println("JOB_"+noJobs);
 				
 				while(!line.startsWith("JOB_"+noJobs))
 				{
@@ -550,9 +573,9 @@ public class InstancesMachines {
 				lineSc = new Scanner(line);
 				lineSc.next();
 				lineSc.useLocale(Locale.US);//??????????????
-				//s2[noJobs-1][idx2][nosMachF] = lineSc.nextDouble();
-				int job = noJobs;
-				System.out.println("s2["+job+"]["+idx2+"]["+nosMachF+"] =" + lineSc.nextDouble());
+				s2[noJobs][idx2][nosMachF-1] = lineSc.nextDouble();
+				//int job = noJobs;
+				//System.out.println("s2["+job+"]["+idx2+"]["+nosMachF+"] =" + lineSc.nextDouble());
 				line = sc.nextLine();
 				idx2++;
 				

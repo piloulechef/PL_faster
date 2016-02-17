@@ -4,7 +4,6 @@ import ilog.concert.IloNumVar;
 import ilog.concert.IloObjectiveSense;
 import ilog.cplex.IloCplex;
 import ilog.cplex.IloCplex.DoubleParam;
-
 import ilog.concert.IloException;
 import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloNumVar;
@@ -12,11 +11,13 @@ import ilog.concert.IloObjectiveSense;
 import ilog.cplex.IloCplex;
 import ilog.cplex.IloCplex.DoubleParam;
 
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
 import Instances.InstancesMachines;
 import Instances.SolutionMachine;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
@@ -41,12 +42,12 @@ import java.text.DecimalFormatSymbols;
     		// Pour accéder aux attributs de la classe TSPSolver
 
     		/** @return la solution du problème */
-    		public SolutionCapacite getSolution() {
+    		public SolutionMachine getSolution() {
     			return solution;
     		}
 
     		/** @return Donnnées du problème de TSP */
-    		public InstanceCapacite getInstance() {
+    		public InstancesMachines getInstance() {
     			return instance;
     		}
 
@@ -54,66 +55,107 @@ import java.text.DecimalFormatSymbols;
     		public long getTime() {
     			return time;
     		}
+    		
+    		
+    		/**
+    		 * Fixe la solution du problème
+    		 * 
+    		 * @param m_solution
+    		 *          : la solution du problème
+    		 */
+    		public void setSolution(SolutionMachine m_solution) {
+    			this.solution = m_solution;
+    		}
+
+    		/**
+    		 * Fixe l'instance du problème
+    		 * 
+    		 * @param m_instance
+    		 *          : l'instance du problème
+    		 */
+    		public void setInstance(InstancesMachines m_instance) {
+    			this.instance = m_instance;
+    		}
+
+    		/**
+    		 * Fixe le temps alloué à la résolution du problème
+    		 * 
+    		 * @param time
+    		 *          : temps alloué à la résolution du problème
+    		 */
+    		public void setTime(long time) {
+    			this.time = time;
+    		}
+
     	  /**
     	   * @param args
     	   * @throws IloException
     	   */
-    	  public static void main(String[] args) throws IloException {
-    		 
+    	  public SolutionMachine  pl_faster() throws Exception {
     	    // DonnÃ©es
 
-    	    int n = 6; /* le nombre de jobs à ordonnancer */
-    	    int M = 2; /* les m machines du niveau 1*/
-    	    int L =2 ; /* les levels */
-    		int F = 2; /* les f machines du niveau 2*/
-    		int R = 200; /* paramètre très grand*/
+    	    int n = instance.getNbJobs(); /* le nombre de jobs à ordonnancer */
+    	    int M = instance.getNbM(); /* les m machines du niveau 1*/
+    	    int L =(int) instance.getNbNvx() ; /* les levels */
+    		int F = instance.getNbF(); /* les f machines du niveau 2*/
+    		double R = instance.getBigM(); /* paramètre très grand*/
     		
     		//R à déterminer
     		
+    		/** 
+    		 * setup time entre le job i et le job j 
+    		 * sur la machine k au niveau 1
+    		 */
     		double [][][] s1= new double [n+1][n+1][M]; 
-    		/* setup time entre le job i et le job j sur la machine k au niveau 1*/
+    		
+    		//remplissage 
+    		
+    		for ( int i = 0 ; i<n+1 ; i ++){
+    			for (int j = 0; j<n+1;j++){
+    				for(int k=0; k<M;k++){
+    			s1[i][j][k] = instance.getS1(i, j, k);
+    				}
+    			}
+    		}
+    		
+    		/** setup time entre le job i et le job j sur la machine k au niveau 2*/   		
     		double [][][] s2= new double [n+1][n+1][F]; 
-    		/* setup time entre le job i et le job j sur la machine k au niveau 2*/
-    		double [][] p1= {
-    	        {
-    	            0.0, 0.0
-    	        }, {
-    	            3.0, 1.0
-    	        }, {
-    	            2.0, 0.3
-    	        }, {
-    	            1.0, 90.0
-    	        }, {
-    	            1.0, 96.0
-    	        }, {
-    	            2.0, 0.4
-    	        }, {
-    	            2.0, 0.6
-    	        }
-    	    };
-    		/* temps de process du job i sur la machine k au niveau 1 */
-    		double [][] p2= {
-    				{
-        	            0.0, 0.0
-        	        }, {
-        	            3.0, 1.0
-        	        }, {
-        	            2.0, 0.3
-        	        }, {
-        	            1.0, 90.0
-        	        }, {
-        	            10.0, 96.0
-        	        }, {
-        	            3.0, 0.4
-        	        }, {
-        	            25.0, 0.6
-        	        }
-        	    };
+    		
+    		for ( int i = 0 ; i<n+1 ; i ++){
+    			for (int j = 0; j<n+1;j++){
+    				for(int k=0; k<M;k++){
+    			s2[i][j][k] = instance.getS2(i, j, k);
+    				}
+    			}
+    		}
+    		
+    		/** temps de process du job i sur la machine k au niveau 1 */
+    		double [][] p1= new double[n+1][M];
+    		
+    		
+    		for ( int i = 0 ; i<n+1 ; i ++){
+    				for(int k=0; k<M;k++){
+    			p1[i][k] = instance.getP1(i, k);
+    				}
+    			
+    		}
+    		
+    		/** temps de process du job i sur la machine k au niveau 2 */
+    		double [][] p2= new double[n+1][F];
+        	    
+    		for ( int i = 0 ; i<n+1 ; i ++){
+				for(int k=0; k<M;k++){
+			p2[i][k] = instance.getP2(i, k);
+				}
+			}
    
-    		/* temps de process du job i sur la machine k au niveau 2 */
-    		double [] d = {1000,1000,1000,1000,1000,1000,1000}; /* due-dates de chaque job */
-    		double [] pen = {1,2,3,4,5,6}; /* penalité de retard */
-
+    		 /** due-dates de chaque job */
+    		double [] d = new double[n+1];
+    				
+    		/** penalité de retard */
+    		double [] pen = new double[n+1];
+    		
+    		
     	    // CrÃ©ation de l'environnement Cplex
     	    IloCplex cplex = new IloCplex();
     	    cplex.setParam(DoubleParam.TiLim, TimeLimit);
@@ -134,7 +176,7 @@ import java.text.DecimalFormatSymbols;
     	    /*variable qui va être supérieure à toutes les variables c[i,l] (cf fonction-objectif) */
     	    IloNumVar [] W = new IloNumVar [1];
 
-    	    // Instantier les variables
+    	    // Instancier les variables
     	    for (int i = 0; i <= n; i++)
     		    for (int j = 0; j <= n; j++)
     			    for (int k = 0; k < M; k++)
@@ -390,57 +432,64 @@ import java.text.DecimalFormatSymbols;
     	      System.out.println("*** " + cplex.getStatus() + "\n*** Valeur trouvÃ©e: " + cplex.getObjValue() + " ***");
 
     	      System.out.println("La date de fin d'ordo est : " + cplex.getValue(W[0]));
-    	         	   
-    	      DecimalFormatSymbols symb = new DecimalFormatSymbols();
-    	      symb.setDecimalSeparator('.');
-    	      DecimalFormat df = new DecimalFormat("#.00", symb);
-    	      // df.setDecimalFormatSymbols()
-    	      System.out.println("Le coÃ»t total est de " + df.format(cplex.getObjValue()) + " euros");
-    	      for (int i = 0; i < n; i++) {
-    		      for (int j = 0; j < n; j++) {
-
-        		      for (int k = 0; k < M; k++) {
-        		    	  if(cplex.getValue(x1[i][j][k])>0.5) {
-        		    		  System.out.println(x1[i][j][k]+"="+cplex.getValue(x1[i][j][k]));
-        		    	  }
-    		  	  
-    		         }
-    		      }
-    		    }
-    	      for (int i = 0; i <= n; i++) {
-    		      for (int j = 0; j <= n; j++) {
-        		      for (int k = 0; k < F; k++) {
-        		    	  if(cplex.getValue(x2[i][j][k])>0.5) {
-        		    		  System.out.println(x2[i][j][k]+"="+cplex.getValue(x2[i][j][k]));
-        		    	  }
-    		  	  
-    		         }
-    		      }
-    		    }
-    	      for (int i = 0; i <= n; i++) {
-    	    	  System.out.println(c[i][1]+"="+cplex.getValue(c[i][1]));	
-    	    	  //System.out.println(c[i][0]+"="+cplex.getValue(c[i][]));
-        	}
-    		      
- 
-    	        }
-    	    else {
-    	    	System.out.println("tata");
+    	      
     	    }
-
+    	    return solution;
+    	  }
+    	  public void solve() throws Exception {
+    		  solution = pl_faster();
     	  }
     	}
-        		      for (int k = 0; k < M; k++) {
-    		    		  System.out.println(x1[i][j][k]);
-    		  	  
-    		         }
-    		      }
-    		    }
-    	        }
-    	    else {
-    	    	System.out.println("tata");
-    	    }
+//    	      DecimalFormatSymbols symb = new DecimalFormatSymbols();
+//    	      symb.setDecimalSeparator('.');
+//    	      DecimalFormat df = new DecimalFormat("#.00", symb);
+//    	      // df.setDecimalFormatSymbols()
+//    	      System.out.println("Le coÃ»t total est de " + df.format(cplex.getObjValue()) + " euros");
+//    	      for (int i = 0; i < n; i++) {
+//    		      for (int j = 0; j < n; j++) {
+//
+//        		      for (int k = 0; k < M; k++) {
+//        		    	  if(cplex.getValue(x1[i][j][k])>0.5) {
+//        		    		  System.out.println(x1[i][j][k]+"="+cplex.getValue(x1[i][j][k]));
+//        		    	  }
+//    		  	  
+//    		         }
+//    		      }
+//    		    }
+//    	      for (int i = 0; i <= n; i++) {
+//    		      for (int j = 0; j <= n; j++) {
+//        		      for (int k = 0; k < F; k++) {
+//        		    	  if(cplex.getValue(x2[i][j][k])>0.5) {
+//        		    		  System.out.println(x2[i][j][k]+"="+cplex.getValue(x2[i][j][k]));
+//        		    	  }
+//    		  	  
+//    		         }
+//    		      }
+//    		    }
+//    	      for (int i = 0; i <= n; i++) {
+//    	    	  System.out.println(c[i][1]+"="+cplex.getValue(c[i][1]));	
+//    	    	  //System.out.println(c[i][0]+"="+cplex.getValue(c[i][]));
+//        	}
+//    		      
+// 
+//    	        }
+//    	    else {
+//    	    	System.out.println("tata");
+//    	    }
+//
+//    	  }
+//    	}
+//        		      for (int k = 0; k < M; k++) {
+//    		    		  System.out.println(x1[i][j][k]);
+//    		  	  
+//    		         }
+//    		      }
+//    		    }
+//    	        }
+//    	    else {
+//    	    	System.out.println("tata");
+//    	    }
 
-    	  }
-    	}
+    	  
+    	
 
