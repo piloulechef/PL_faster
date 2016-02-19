@@ -25,16 +25,16 @@ public class InstancesMachines {
 		private double R;
 		
 		/**setup time pour le niveau 1*/
-		private double[][][] s1;
+		private double[][][] s0;
 		
 		/**setup time pour le niveau 2*/
-		private double[][][] s2;
+		private double[][][] s1;
 		
 		/**processing time pour les jobs sur niveau 1*/
-		private double[][] p1;
+		private double[][] p0;
 		
 		/**processing time pour les jobs sur niveau 2*/
-		private double[][] p2;
+		private double[][] p1;
 		
 		/**due date pour le job*/
 		private double[] d;
@@ -48,12 +48,7 @@ public class InstancesMachines {
 		/** Nom du fichier TSPLib correspondant à l'instance chargée */
 		private String fileName;
 
-		/** Nom du fichier TSPLib correspondant à l'instance chargée */
-		private String fileName1;
 		
-		/** Nom du fichier TSPLib correspondant à l'instance chargée */
-		private String fileName2;
-
 		// --------------------------------------------
 		// --------------- ACCESSEURS -----------------
 		// --------------------------------------------
@@ -82,22 +77,22 @@ public class InstancesMachines {
 		
 		/** @return le tableau des setup pour le niveau 1*/
 		public double[][][] getTabSetupM() {
-			return s1;
+			return s0;
 		}
 		
 		/** @return le tableau des setup pour le niveau 2*/
 		public double[][][] getTabSetupF() {
-			return s2;
+			return s1;
 		}
 		
 		/** @return le tableau des processing time pour le niveau 1*/
 		public double[][] getTabProcessM() {
-			return p1;
+			return p0;
 		}
 		
 		/** @return le tableau des processing time pour le niveau 2*/
 		public double[][] getTabProcessF() {
-			return p2;
+			return p1;
 		}
 		
 		/** @return les due date */
@@ -125,9 +120,9 @@ public class InstancesMachines {
 		 * @return le processing time du job i sur la machine m au niveau 1
 		 * @throws Exception
 		 **/
-		public double getP1(int i, int m) throws Exception 
+		public double getP0(int i, int m) throws Exception 
 		{
-			return p1[i][m];
+			return p0[i][m];
 		}
 			
 		/**
@@ -138,9 +133,9 @@ public class InstancesMachines {
 		 * @return le processing time du job i sur la machine m au niveau 2
 		 * @throws Exception
 		 **/
-		public double getP2(int i, int f) throws Exception 
+		public double getP1(int i, int f) throws Exception 
 		{
-			return p2[i][f];
+			return p1[i][f];
 	
 		}
 		
@@ -152,9 +147,9 @@ public class InstancesMachines {
 		 * @return le setup time du job i sur la machine m au niveau 1
 		 * @throws Exception
 		 **/
-		public double getS1(int i, int j, int m) throws Exception 
+		public double getS0(int i, int j, int m) throws Exception 
 		{
-			return s1[i][j][m];
+			return s0[i][j][m];
 		}
 		
 		/**
@@ -165,9 +160,9 @@ public class InstancesMachines {
 		 * @return le setup time du job i sur la machine m au niveau 2
 		 * @throws Exception
 		 **/
-		public double getS2(int i,int j, int f) throws Exception 
+		public double getS1(int i,int j, int f) throws Exception 
 		{
-			return s2[i][j][f];
+			return s1[i][j][f];
 	
 		}
 		
