@@ -498,6 +498,8 @@ import java.util.Scanner;
     	    Z = cplex.numVar(0, Double.MAX_VALUE, "obj");
     	    
     	 // Contrainte 1: 
+    	    //impose que chaque job n'est ordonnancé qu'une fois sur chaque machine
+    	    // au niveau 0
     	    for (int i = 1; i <= n; i++) {
     	      IloLinearNumExpr expr = cplex.linearNumExpr();
     	      for (int k = 0; k <= M-1; k++) {
@@ -508,6 +510,8 @@ import java.util.Scanner;
     	    
     	    
     	 // Contrainte 2: 
+    	    //impose que chaque job n'est ordonnancé qu'une fois sur chaque machine
+    	    // au niveau 1
     	    for (int i = 1; i <= n; i++) {
     		      IloLinearNumExpr expr = cplex.linearNumExpr();
     		      for (int k = 0; k <= F-1; k++) {
@@ -518,6 +522,8 @@ import java.util.Scanner;
     		    }
 
     	    // Contrainte 3 : 
+    	    //impose que chaque job ordonnancé sur un machine au niveau 0 doit avoir
+    	    //un successeur sur cette machine.
     	    for (int i = 0; i <= n; i++) {
     	    	for (int k =0; k <= M-1;k++) {
     	    		IloLinearNumExpr expr = cplex.linearNumExpr();
@@ -529,6 +535,8 @@ import java.util.Scanner;
     	    }
 //    	    	    
 ////    	 // Contrainte 4: 
+    	    //impose que chaque job ordonnancé sur un machine au niveau 1 doit avoir
+    	    //un successeur sur cette machine.
     	    for (int i = 0; i <= n; i++) {
     		    for (int k = 0; k <= F-1; k++) {
     		    	IloLinearNumExpr expr = cplex.linearNumExpr();
@@ -540,6 +548,8 @@ import java.util.Scanner;
     		    }
 //    	    
 //    		 // Contrainte 5: 
+    	    //impose que chaque job ordonnancé sur un machine au niveau 0 doit avoir
+    	    //un prédecesseur sur cette machine.
     	    for (int i = 0; i <= n; i++) {
     		    for (int k = 0; k <= M-1; k++) {
     		    	IloLinearNumExpr expr = cplex.linearNumExpr();
@@ -551,6 +561,8 @@ import java.util.Scanner;
     		    }
 //    	    	    
 //    		 // Contrainte 6: 
+    	    //impose que chaque job ordonnancé sur un machine au niveau 1 doit avoir
+    	    //un prédecesseur sur cette machine.
     	    for (int i = 0; i <= n; i++) {
     		    for (int k = 0; k <= F-1; k++) {
     		    	IloLinearNumExpr expr = cplex.linearNumExpr();
@@ -562,6 +574,8 @@ import java.util.Scanner;
     		    }
     	    	    		
     	  // Contrainte 7: 
+    	    //définie le completion time comme étant supérieur au processing time 
+    	    //plus le temps de setup entre le job et son prédecesseur au niveau 0
     	   for (int i = 0; i <= n; i++) {
     		   for (int j = 1; j <= n; j++) {
     			   for (int k = 0; k <= M-1; k++) {
@@ -579,6 +593,8 @@ import java.util.Scanner;
 	        	     
     	    	  
     	    //Contrainte 8 		
+    	 //définie le completion time comme étant supérieur au processing time 
+   	    //plus le temps de setup entre le job et son predecesseur au niveau 1
     	   for (int i = 0; i <= n; i++) {
     		   for (int j = 1; j <= n; j++) {
     			   for (int k = 0; k <= F-1; k++) {
@@ -592,6 +608,8 @@ import java.util.Scanner;
     		   }
     	   }
     	   // Contrainte 7 nadj: 
+    	   //impose le completion time du premier job ordonnancé sur une machine
+    	   //au niveau 0 d'être supérieur à son processing time
     	   for (int i = 1; i <= n; i++) {
 			   IloLinearNumExpr expr = cplex.linearNumExpr();
     		   for (int k = 0; k <= M-1; k++) {
@@ -601,6 +619,9 @@ import java.util.Scanner;
 
     	   }
     	// Contrainte 7 nadj2: 
+    	 //impose le completion time du premier job ordonnancé sur une machine
+    	   //au niveau 1 d'être supérieur à son processing time
+    	  
     	   for (int i = 1; i <= n; i++) {
 			   IloLinearNumExpr expr = cplex.linearNumExpr();
     		   for (int k = 0; k <= F-1; k++) {
@@ -637,7 +658,10 @@ import java.util.Scanner;
 //    	   }
     	   
     	   
-    	    	//Contrainte 9 
+    	 //Contrainte 9 
+    	     //impose le completion time d'un job au niveau 1 à être supérieur 
+    	   // au completion time de ce job au niveau 0 par au moins le 
+    	   //processing time de ce job au niveau 1
     	    
     	    	for(int i = 1 ; i<=n ; i++){
     	    		IloLinearNumExpr expr = cplex.linearNumExpr();
@@ -655,7 +679,7 @@ import java.util.Scanner;
     	    	}
     	    	    	
     	    	//Contrainte 10
-    	    	
+    	    	//impose je job 0 à être en premier sur chaque machine du niveau 0 
     	    	for(int k = 0 ; k<M; k ++){
     	    		IloLinearNumExpr expr = cplex.linearNumExpr();
     	    		
@@ -667,6 +691,7 @@ import java.util.Scanner;
     	    	}
     	    	
 //    	    	//Contrainte 11
+    	    	//impose je job 0 à être en dernier sur chaque machine du niveau 0
     	    	
     	    	for(int k = 0 ; k<M; k ++){
     	    		IloLinearNumExpr expr = cplex.linearNumExpr();
@@ -679,7 +704,7 @@ import java.util.Scanner;
     	    	}
   	
 //    	    	//Contrainte 12
-    	    	
+    	    	//impose le job 0 à être en dernier sur chaque machine au niveau 1
     	    	for(int k = 0 ; k<F; k ++){
     	    		IloLinearNumExpr expr = cplex.linearNumExpr();
     	    		
@@ -691,7 +716,7 @@ import java.util.Scanner;
     	    	}
     	    	
 //    	    	//Contrainte 13
-//    	    	
+//    	    	//impose le job 0 à être en premier sur chaque machine au niveau 1
     	    	for(int k = 0 ; k<F; k ++){
     	    		IloLinearNumExpr expr = cplex.linearNumExpr();
     	    		
@@ -703,6 +728,7 @@ import java.util.Scanner;
     	    	} 
     	   
     	   // Contrainte 14: 
+    	    	//permet de définir l'objectif en minimax
     	    for (int i = 0; i <= n; i++) {
     		  cplex.addGe(W[0], c[i][1]);
     	    }
