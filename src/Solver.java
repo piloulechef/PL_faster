@@ -17,8 +17,8 @@ import java.util.Scanner;
 
     	  // Temps limite en secondes
     	  private static final double TimeLimit = 300;
-
-    	 
+  	  
+    	  
     	  /**
     	   * @param arg
     	   * @throws IloException
@@ -764,58 +764,178 @@ import java.util.Scanner;
 
     	    // Affichage des rÃ©sultats
     	    if (result) {
+    	    	
+    	    	
     	    //  System.out.println("*** " + cplex.getStatus() + "\n*** Valeur trouvÃ©e: " + cplex.getObjValue() + " ***");
-
     	    // System.out.println("La date de fin d'ordo est : " + cplex.getValue(Z));
     	         	   
     	      DecimalFormatSymbols symb = new DecimalFormatSymbols();
     	      symb.setDecimalSeparator('.');
     	      DecimalFormat df = new DecimalFormat("#.00", symb);
     	      // df.setDecimalFormatSymbols()
+    	      
+    	     
+    	      
+    	     //affichage solution
+    	      
     	      System.out.println("la date de fin d'ordo est : " + df.format(cplex.getObjValue()) + " min");
-    	      for (int i = 0; i <= n; i++) {
-    		      for (int j = 0; j <= n; j++) {
-        		      for (int k = 0; k <= M-1; k++) {
-        		    	  if(cplex.getValue(x0[i][j][k])>0.5) {
-        		    		  System.out.println(x0[i][j][k]+"="+Math.ceil(cplex.getValue(x0[i][j][k])));
-        		    	  }
-    		  	  
-    		         }
-    		      }
-    		    }
-    	      for (int i = 0; i <= n; i++) {
-    		      for (int j = 0; j <= n; j++) {
-        		      for (int k = 0; k < F; k++) {
-        		    	  if(cplex.getValue(x1[i][j][k])>0.5) {
-        		    		  System.out.println(x1[i][j][k]+"="+Math.ceil(cplex.getValue(x1[i][j][k])));
-        		    	  }
-    		  	  
-    		         }
-    		      }
-    		    }
+    	      
+    	      for(int l=0; l<=L-1;l++)
+    	      {
+    	    	  
+    	    	  System.out.println("Ordonnancement pour le niveau " + l + " : ");
+    	    	  if( l==0){
+    	    	  for(int m = 0 ; m<=M-1;m++)
+    	    	  {
+    	    		  System.out.println("	- pour la machine "+ m + " : ");
+    	    		  int im=0;
+    	    		  String ordo ="0";
+    	    		  String completiontime="0";
+    	    		  do
+    	    		  {
+    	    			  int jm = 0;
+    	    			  int c1 = 0;
+    	    			  //int compteur = 0;
+    	    			  
+    	    			  while(jm<=n && c1==0)
+    	    			  {
+    	    				 // System.out.println("avant if : "+ compteur);
+    	    				  //System.out.println(cplex.getValue(x0[im][jm][m]));
+    	    				  //System.out.println(cplex.getValue(x0[im][jm][m])>0.5);
+        	    				  if(cplex.getValue(x0[im][jm][m])>0.0000001)
+        	    				  {
+            	    				  //System.out.println("dans if : " +compteur);
 
-    	      for (int i = 0; i <= n; i++) {
-        		     for (int k = 0; k < M; k++) {
-        		    	  if(cplex.getValue(y0[i][k])>0.5) {
-        		    		  System.out.println(y0[i][k]+"="+cplex.getValue(y0[i][k]));
-        		    	  }
-    		      }
-    		    }
-    	      
-    	      for (int i = 0; i <= n; i++) {
-     		     for (int k = 0; k < F; k++) {
-     		    	  if(cplex.getValue(y1[i][k])>0.5) {
-     		    		  System.out.println(y1[i][k]+"="+cplex.getValue(y1[i][k]));
-     		    	  }
- 		      }
- 		    }
-    	      
-    	      for (int i = 0; i <= n; i++) {
-    	    	  System.out.println(c[i][0]+"="+cplex.getValue(c[i][0]));	
-    	    	  System.out.println(c[i][1]+"="+cplex.getValue(c[i][1]));
-    	    	  }
-    	      System.out.println("obj = "+cplex.getValue(exprObj));
-    		      
+        	    					  c1=1;
+        	    					  ordo = ordo + " - " + jm;
+        	    					  if(jm!=0)
+        	    					  {
+        	    					  completiontime = completiontime + " - ("+jm+")" + cplex.getValue(c[jm][l]);
+        	    					  }else
+        	    					  	{
+        	    						  completiontime = completiontime+ " - "+jm;
+        	    					  
+        	    					  	}
+        	    					  
+        	    				  }else{
+            	    				  //System.out.println("dans else : " +compteur);
+
+            	    				  jm++;}
+        	    				  //System.out.println("après if : " +compteur);
+        	    				  //compteur ++;
+
+        	    				  
+    	    			  }
+    	    			  
+    	    			  im = jm;
+        	    					  
+    	    		  }while(im!=0);
+    	    			  
+    	    			//System.out.println(ordo);	
+    	    			System.out.println("\n" + completiontime+ "\n");
+    	    			
+    	    		}
+    	    	  
+    	    	  //BIG ELSE DU LEVEL
+    	    	  			}else{
+    	    	  				
+    	    	  				for(int f = 0 ; f<=F-1;f++)
+    	    	    	    	  {
+    	    	    	    		  System.out.println("	- pour la machine "+ f + " : ");
+    	    	    	    		  int i_f=0;
+    	    	    	    		  String ordof ="0";
+    	    	    	    		  String completiontimef = "0";
+    	    	    	    		  do
+    	    	    	    		  {
+    	    	    	    			  int jf = 0;
+    	    	    	    			  int c2 = 0;
+    	    	    	    			  
+    	    	    	    			  while(jf<=n && c2!=1)
+    	    	    	    			  {
+    	    	        	    				  if(cplex.getValue(x1[i_f][jf][f])>0.0000001)
+    	    	        	    				  {
+    	    	        	    					  c2=1;
+    	    	        	    					  ordof = ordof + " - " + jf;
+    	    	        	    					  if(jf!=0)
+    	    	        	    					  {
+    	    	        	    					  completiontimef = completiontimef + " - ("+jf+")" + cplex.getValue(c[jf][l]);
+    	    	        	    					  }else
+    	    	        	    					  	{
+    	    	        	    						  completiontimef = completiontimef + " - "+jf;
+    	    	        	    					  
+    	    	        	    					  	}
+    	    	        	    				  }else{jf++;}
+    	    	        	    				  
+    	    	    	    			  }
+    	    	    	    			  
+    	    	    	    			  i_f = jf;
+    	    	        	    					  
+    	    	    	    		  }while(i_f!=0);
+    	    	    	    			  
+    	    	    	    			//System.out.println(ordof);	
+    	    	    	    			System.out.println("\n" + completiontimef+ "\n");
+    	    	    	    			
+    	    	    	    		}
+    	    	    	    	  
+    	    	  				
+    	    	  				
+    	    	  				
+    	    	  				
+    	    	  			}
+    	    	}
+    	    	  
+//    	      
+//    	    	  int n ; /* le nombre de jobs à ordonnancer */
+//    	    	  	    int M ; /* les m machines du niveau 0*/
+//    	    	  		int F ; /* les f machines du niveau 1*/
+//    	    	  	    int L ; /* les levels */
+//    	    	  		int R ; /* paramètre très grand*/
+//    	      
+//    	      
+//    	      
+//    	      for (int i = 0; i <= n; i++) {
+//    		      for (int j = 0; j <= n; j++) {
+//        		      for (int k = 0; k <= M-1; k++) {
+//        		    	  if(cplex.getValue(x0[i][j][k])>0.5) {
+//        		    		  System.out.println(x0[i][j][k]+"="+Math.ceil(cplex.getValue(x0[i][j][k])));
+//        		    	  }
+//    		  	  
+//    		         }
+//    		      }
+//    		    }
+//    	      for (int i = 0; i <= n; i++) {
+//    		      for (int j = 0; j <= n; j++) {
+//        		      for (int k = 0; k < F; k++) {
+//        		    	  if(cplex.getValue(x1[i][j][k])>0.5) {
+//        		    		  System.out.println(x1[i][j][k]+"="+Math.ceil(cplex.getValue(x1[i][j][k])));
+//        		    	  }
+//    		  	  
+//    		         }
+//    		      }
+//    		    }
+//
+//    	      for (int i = 0; i <= n; i++) {
+//        		     for (int k = 0; k < M; k++) {
+//        		    	  if(cplex.getValue(y0[i][k])>0.5) {
+//        		    		  System.out.println(y0[i][k]+"="+cplex.getValue(y0[i][k]));
+//        		    	  }
+//    		      }
+//    		    }
+//    	      
+//    	      for (int i = 0; i <= n; i++) {
+//     		     for (int k = 0; k < F; k++) {
+//     		    	  if(cplex.getValue(y1[i][k])>0.5) {
+//     		    		  System.out.println(y1[i][k]+"="+cplex.getValue(y1[i][k]));
+//     		    	  }
+// 		      }
+// 		    }
+//    	      
+//    	      for (int i = 0; i <= n; i++) {
+//    	    	  System.out.println(c[i][0]+"="+cplex.getValue(c[i][0]));	
+//    	    	  System.out.println(c[i][1]+"="+cplex.getValue(c[i][1]));
+//    	    	  }
+//    	      System.out.println("obj = "+cplex.getValue(exprObj));
+//    		      
  
     	        }
     	    else {
@@ -827,12 +947,6 @@ import java.util.Scanner;
 
     	  }
     	
-    	
-
-
-
-
-
 
 
 public int nothinghamza(){
@@ -1449,10 +1563,6 @@ public int nothinghamza(){
 //
 return 0 ; 
 }
-
-
-
-
 
 
 
