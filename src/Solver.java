@@ -16,7 +16,7 @@ import java.util.Scanner;
     	public class Solver {
 
     	  // Temps limite en secondes
-    	  private static final double TimeLimit = 300;
+    	  private static final double TimeLimit = 60;
   	  
     	  
     	  /**
@@ -24,7 +24,7 @@ import java.util.Scanner;
     	   * @throws IloException
     	 * @throws IOException 
     	   */
-    	  public static void main(String[] arg) throws IloException, IOException {
+    	  public static void main(String[] args) throws IloException, IOException {
     		  
     		  // Données
 
@@ -38,7 +38,7 @@ import java.util.Scanner;
     	  		
     		  
     		  String filename = null;
-    		  filename = arg[0];
+    		  filename = args[2];
     		  
     		  File mfile = new File(filename);
     			if (!mfile.exists()) {
@@ -97,7 +97,7 @@ import java.util.Scanner;
 
     			while (!line.startsWith("NOMBRE_DE_NIVEAUX")) {
     				line = sc.nextLine();
-    				//System.err.println(line);
+    				System.err.println(line);
     			}
     			lineSc.close();
     			lineSc = new Scanner(line);
@@ -153,11 +153,13 @@ import java.util.Scanner;
     			
     			while (!line.startsWith("DUE_DATE")) {
     				line = sc.nextLine();
+    				//System.err.println(line);
     				
     			}
     			
     			while(!line.startsWith("0")){
     				line = sc.nextLine();
+    				//System.err.println(line);
     				
     			}
 
@@ -210,7 +212,7 @@ import java.util.Scanner;
     			
     			while (!line.startsWith("JOBS")) {
     				line = sc.nextLine();
-    				//System.err.println(line);
+    				System.err.println(line);
     			}
     			
     			while (!line.startsWith("M1")) {
@@ -236,7 +238,7 @@ import java.util.Scanner;
     					lineSc.next();
     					lineSc.useLocale(Locale.US);//??????????????
     					p0[idx2][noMach] = lineSc.nextDouble();
-    					//System.out.println("p1["+idx2+"]["+noMach+"] = " + p1[idx2][noMach]);
+    					//System.out.println("p0["+idx2+"]["+noMach+"] = " + p0[idx2][noMach]);
     					//int mach = noMach+1;
     					//System.out.println("p1["+idx2+"]["+mach+"] = " + lineSc.nextInt());
     					line = sc.nextLine();
@@ -249,7 +251,7 @@ import java.util.Scanner;
     			
     			while (!line.startsWith("NIVEAU_2")) {
     				line = sc.nextLine();
-    				System.err.println(line);
+    				//System.err.println(line);
     			}
     				
     			int noMachF = 1;
@@ -276,7 +278,7 @@ import java.util.Scanner;
     					lineSc.next();
     					lineSc.useLocale(Locale.US);//??????????????
     					p1[idx2][noMachF-1] = lineSc.nextDouble();
-    					//System.out.println("p2["+idx2+"]["+(noMachF-1)+"] = " + p2[idx2][noMachF-1]);
+    					//System.out.println("p1["+idx2+"]["+(noMachF-1)+"] = " + p1[idx2][noMachF-1]);
     					//int nof = noMachF-1;
     					//System.out.println("p2["+idx2+"]["+nof+"] = " + lineSc.nextInt());
     					line = sc.nextLine();
@@ -317,7 +319,7 @@ import java.util.Scanner;
     			
     				while(noJobs<=n-1)
     				{
-    					//System.out.println("JOB_"+noJobs);
+    					System.out.println("JOB_"+noJobs);
     					while(!line.startsWith("JOB_"+noJobs))
     					{
     						line = sc.nextLine();
@@ -365,7 +367,7 @@ import java.util.Scanner;
     			
     			while(nosMachF<=F){
     				
-    				//System.out.println("F"+nosMachF);
+    				System.out.println("F"+nosMachF);
     				
     				while(!line.startsWith("F"+nosMachF)){
     					line = sc.nextLine();
@@ -377,7 +379,7 @@ import java.util.Scanner;
     			
     				while(noJobs<=n-1)
     				{
-    					//System.out.println("JOB_"+noJobs);
+    					System.out.println("JOB_"+noJobs);
     					
     					while(!line.startsWith("JOB_"+noJobs))
     					{
@@ -402,8 +404,10 @@ import java.util.Scanner;
     					lineSc.useLocale(Locale.US);//??????????????
     					s1[noJobs][idx2][nosMachF-1] = lineSc.nextDouble();
     					//int job = noJobs;
-    					//System.out.println("s2["+job+"]["+idx2+"]["+nosMachF+"] =" + lineSc.nextDouble());
+    					//System.out.println("s1["+job+"]["+idx2+"]["+(nosMachF-1)+"] =" + s1[noJobs][idx2][nosMachF-1]);
     					line = sc.nextLine();
+    					
+
     					idx2++;
     					
     				}
@@ -797,7 +801,7 @@ import java.util.Scanner;
     	    			  int c1 = 0;
     	    			  //int compteur = 0;
     	    			  
-    	    			  while(jm<=n && c1==0)
+    	    			  while(jm<=n-1 && c1==0)
     	    			  {
     	    				 // System.out.println("avant if : "+ compteur);
     	    				  //System.out.println(cplex.getValue(x0[im][jm][m]));
@@ -850,7 +854,7 @@ import java.util.Scanner;
     	    	    	    			  int jf = 0;
     	    	    	    			  int c2 = 0;
     	    	    	    			  
-    	    	    	    			  while(jf<=n && c2!=1)
+    	    	    	    			  while(jf<=n-1 && c2!=1)
     	    	    	    			  {
     	    	        	    				  if(cplex.getValue(x1[i_f][jf][f])>0.0000001)
     	    	        	    				  {
