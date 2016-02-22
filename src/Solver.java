@@ -16,7 +16,7 @@ import java.util.Scanner;
     	public class Solver {
 
     	  // Temps limite en secondes
-    	  private static final double TimeLimit = 300;
+    	  private static final double TimeLimit = 1200;
   	  
     	  
     	  /**
