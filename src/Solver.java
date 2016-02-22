@@ -16,7 +16,7 @@ import java.util.Scanner;
     	public class Solver {
 
     	  // Temps limite en secondes
-    	  private static final double TimeLimit = 60;
+    	  private static final double TimeLimit = 300;
   	  
     	  
     	  /**
@@ -38,7 +38,7 @@ import java.util.Scanner;
     	  		
     		  
     		  String filename = null;
-    		  filename = args[2];
+    		  filename = args[0];
     		  
     		  File mfile = new File(filename);
     			if (!mfile.exists()) {
