@@ -744,6 +744,13 @@ import java.util.Scanner;
     		  cplex.addGe(W[0], c[i][1]);
     	    }
     	    
+    	    //contrainte 17 (renfort?)
+    	    double borneinf = 0;
+    	    for(int i=0 ; i<=n; i++){
+    	    	borneinf = borneinf + p0[i][0];
+    	    }
+    	    	cplex.addGe(W[0],borneinf);
+    	    
     	      	      	    	        		
     	    // Objectif: on cherche à minimiser la date de fin au plus tard de toutes les tâches
     	   // et à ,pénaliser les retards)
