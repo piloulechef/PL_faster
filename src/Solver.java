@@ -22,7 +22,7 @@ import java.util.Scanner;
     	  /**
     	   * @param arg
     	   * @throws IloException
-    	 * @throws IOException 
+    	   * @throws IOException 
     	   */
     	  public static void main(String[] args) throws IloException, IOException {
     		  
@@ -802,10 +802,14 @@ import java.util.Scanner;
     	    		  int im=0;
     	    		  String ordo ="0";
     	    		  String completiontime="0";
+    	    		  double processingtime=0;
+    	    		  double setup = 0;
+    	    		  int k = 0;
     	    		  do
     	    		  {
     	    			  int jm = 0;
     	    			  int c1 = 0;
+    	    			  
     	    			  //int compteur = 0;
     	    			  
     	    			  while(jm<=n-1 && c1==0)
@@ -822,10 +826,12 @@ import java.util.Scanner;
         	    					  if(jm!=0)
         	    					  {
         	    					  completiontime = completiontime + " - ("+jm+")" + cplex.getValue(c[jm][l]);
+        	    					  processingtime = processingtime + p0[jm][m];
+        	    					  setup = setup + s0[im][jm][m];
         	    					  }else
         	    					  	{
         	    						  completiontime = completiontime+ " - "+jm;
-        	    					  
+        	    						  k = im;
         	    					  	}
         	    					  
         	    				  }else{
@@ -844,7 +850,9 @@ import java.util.Scanner;
     	    			  
     	    			//System.out.println(ordo);	
     	    			System.out.println("\n" + completiontime+ "\n");
-    	    			
+    	    			System.out.println("la fin de l'ordo est : "+ cplex.getValue(c[k][l]));
+    	    			System.out.println("La somme des processings times est : " + processingtime);
+    	    			System.out.println("La somme des setup est : " + setup);
     	    		}
     	    	  
     	    	  //BIG ELSE DU LEVEL
@@ -856,6 +864,9 @@ import java.util.Scanner;
     	    	    	    		  int i_f=0;
     	    	    	    		  String ordof ="0";
     	    	    	    		  String completiontimef = "0";
+    	    	    	    		  double processingtimef=0;
+    	    	    	    		  double setupf = 0;
+    	    	    	    		  int kf = 0;
     	    	    	    		  do
     	    	    	    		  {
     	    	    	    			  int jf = 0;
@@ -870,9 +881,12 @@ import java.util.Scanner;
     	    	        	    					  if(jf!=0)
     	    	        	    					  {
     	    	        	    					  completiontimef = completiontimef + " - ("+jf+")" + cplex.getValue(c[jf][l]);
+    	    	        	    					  processingtimef = processingtimef + p1[jf][f];
+    	    	        	    					  setupf = setupf + s1[i_f][jf][f];
     	    	        	    					  }else
     	    	        	    					  	{
     	    	        	    						  completiontimef = completiontimef + " - "+jf;
+    	    	        	    						  kf = i_f;
     	    	        	    					  
     	    	        	    					  	}
     	    	        	    				  }else{jf++;}
@@ -885,6 +899,9 @@ import java.util.Scanner;
     	    	    	    			  
     	    	    	    			//System.out.println(ordof);	
     	    	    	    			System.out.println("\n" + completiontimef+ "\n");
+    	    	    	    			System.out.println("la fin de l'ordo est : "+ cplex.getValue(c[kf][l]));
+    	    	    	    			System.out.println("La somme des processings times est : " + processingtimef);
+    	    	    	    			System.out.println("La somme des setup est : " + setupf);
     	    	    	    			
     	    	    	    		}
     	    	    	    	  
